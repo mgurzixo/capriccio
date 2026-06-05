@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 import path from 'node:path'
 import os from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -10,7 +10,9 @@ const currentDir = fileURLToPath(new URL('.', import.meta.url))
 
 let mainWindow
 
-async function createWindow () {
+async function createWindow() {
+  Menu.setApplicationMenu(null)
+
   /**
    * Initial window options
    */
@@ -19,14 +21,18 @@ async function createWindow () {
     width: 1000,
     height: 600,
     useContentSize: true,
+    autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: true,
       // More info: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/electron-preload-script
       preload: path.resolve(
         currentDir,
-        path.join(process.env.QUASAR_ELECTRON_PRELOAD_FOLDER, 'electron-preload' + process.env.QUASAR_ELECTRON_PRELOAD_EXTENSION)
-      )
-    }
+        path.join(
+          process.env.QUASAR_ELECTRON_PRELOAD_FOLDER,
+          'electron-preload' + process.env.QUASAR_ELECTRON_PRELOAD_EXTENSION,
+        ),
+      ),
+    },
   })
 
   if (process.env.DEV) {
