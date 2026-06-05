@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Menu } from 'electron'
+import { mkdirSync } from 'node:fs'
 import path from 'node:path'
 import os from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -9,6 +10,21 @@ const platform = process.platform || os.platform()
 const currentDir = fileURLToPath(new URL('.', import.meta.url))
 
 let mainWindow
+
+function configureAppDataPaths() {
+  const appDataRoot = app.getPath('appData')
+  const appFolderName = process.env.DEV ? `${app.getName()}-dev` : app.getName()
+  const userDataPath = path.join(appDataRoot, appFolderName)
+  const sessionDataPath = path.join(userDataPath, 'session-data')
+
+  mkdirSync(userDataPath, { recursive: true })
+  mkdirSync(sessionDataPath, { recursive: true })
+
+  app.setPath('userData', userDataPath)
+  app.setPath('sessionData', sessionDataPath)
+}
+
+configureAppDataPaths()
 
 async function createWindow() {
   Menu.setApplicationMenu(null)
