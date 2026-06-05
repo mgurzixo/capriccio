@@ -5,6 +5,11 @@ import { defineConfig } from '#q-app/wrappers'
 
 export default defineConfig((/* ctx */) => {
   return {
+    bin: {
+      linuxAndroidStudio: '/home/mgouget/android-studio/bin/studio.sh',
+      windowsAndroidStudio: 'C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe',
+    },
+
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
     // preFetch: true,
 
@@ -91,7 +96,7 @@ export default defineConfig((/* ctx */) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['Notify'],
     },
 
     // animations: 'all', // --- includes all animations
@@ -171,23 +176,53 @@ export default defineConfig((/* ctx */) => {
       // specify the debugging port to use for the Electron app when running in development mode
       inspectPort: 5858,
 
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: 'builder', // 'packager' or 'builder'
+
+      appId: 'pt.capriccio.app',
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
+        asar: true,
+        executableName: 'Capriccio',
+        appCopyright: 'Open source build for archaeological coordinate conversion',
+        icon: 'src-electron/icons/icon',
+
         // OS X / Mac App Store
         // appBundleId: '',
         // appCategoryType: '',
         // osxSign: '',
         // protocol: 'myapp://path',
+
         // Windows only
-        // win32metadata: { ... }
+        win32metadata: {
+          CompanyName: 'Capriccio',
+          FileDescription: 'Archaeological coordinate conversion for Portugal',
+          InternalName: 'Capriccio',
+          OriginalFilename: 'Capriccio.exe',
+          ProductName: 'Capriccio',
+        },
       },
 
       builder: {
         // https://www.electron.build/configuration
 
-        appId: 'capriccio',
+        appId: 'pt.capriccio.app',
+        productName: 'Capriccio',
+        copyright: 'Open source build for archaeological coordinate conversion',
+        directories: {
+          output: 'dist/electron',
+        },
+        linux: {
+          target: ['AppImage'],
+          category: 'Utility',
+        },
+        win: {
+          target: ['nsis'],
+        },
+        nsis: {
+          oneClick: false,
+          allowToChangeInstallationDirectory: true,
+        },
       },
     },
 

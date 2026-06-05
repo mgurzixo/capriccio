@@ -1,1 +1,349 @@
-// app global css
+@import 'leaflet/dist/leaflet.css';
+
+:root {
+  color-scheme: light;
+  --capriccio-ink: #15334a;
+  --capriccio-sand: #f3ebdd;
+  --capriccio-clay: #e6492d;
+  --capriccio-gold: #d7a441;
+  --capriccio-surface: rgba(255, 250, 241, 0.92);
+  --capriccio-line: rgba(21, 51, 74, 0.12);
+}
+
+body {
+  min-height: 100vh;
+  color: var(--capriccio-ink);
+  background:
+    radial-gradient(circle at top right, rgba(215, 164, 65, 0.28), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(230, 73, 45, 0.18), transparent 26%),
+    linear-gradient(180deg, #f7f1e6 0%, #efe4d2 100%);
+}
+
+.app-header {
+  color: #fff9f1;
+  background: linear-gradient(120deg, #15334a, #29516f 58%, #6f8fa2);
+  box-shadow: 0 18px 48px rgba(21, 51, 74, 0.22);
+}
+
+.header-shell {
+  display: grid;
+  gap: 12px;
+}
+
+.header-shell--android-capacitor {
+  padding-top: max(24px, calc(env(safe-area-inset-top, 0px) + 8px));
+}
+
+.header-toolbar {
+  min-height: 0;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  flex: 0 0 auto;
+  max-width: 100%;
+}
+
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.toolbar-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(8, 20, 29, 0.2);
+  flex-shrink: 0;
+}
+
+.toolbar-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.toolbar-subtitle,
+.toolbar-caption {
+  font-size: 0.85rem;
+  opacity: 0.82;
+}
+
+.toolbar-caption {
+  text-align: right;
+  line-height: 1.25;
+}
+
+.header-help-btn {
+  color: #fff9f1;
+  border: 1px solid rgba(255, 249, 241, 0.28);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: rgba(255, 249, 241, 0.08);
+}
+
+.help-card {
+  width: min(720px, calc(100vw - 32px));
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 249, 239, 0.99), rgba(243, 235, 221, 0.97));
+  color: var(--capriccio-ink);
+  box-shadow: 0 24px 64px rgba(21, 51, 74, 0.28);
+}
+
+.help-card__header {
+  padding: 18px 20px 8px;
+}
+
+.help-card__title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.help-card__subtitle {
+  font-size: 0.9rem;
+  color: rgba(21, 51, 74, 0.76);
+}
+
+.help-card__content {
+  padding: 8px 20px 8px;
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.help-card__content p {
+  margin: 0 0 14px;
+}
+
+.help-card__actions {
+  padding: 0 20px 18px;
+}
+
+.page-shell {
+  padding: 16px 18px 18px;
+}
+
+.page-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 420px) minmax(320px, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.panel-stack,
+.map-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.system-card,
+.map-card {
+  border: 1px solid var(--capriccio-line);
+  border-radius: 18px;
+  background: var(--capriccio-surface);
+  box-shadow: 0 14px 40px rgba(52, 56, 49, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.compact-card .q-card__section {
+  padding: 12px 14px;
+}
+
+.compact-actions {
+  padding: 0 14px 12px;
+}
+
+.accent-card {
+  background: linear-gradient(180deg, rgba(255, 245, 232, 0.96), rgba(247, 236, 217, 0.96));
+}
+
+.preset-card {
+  background: linear-gradient(180deg, rgba(242, 235, 221, 0.98), rgba(255, 249, 239, 0.96));
+}
+
+.preset-card-header {
+  padding-bottom: 0;
+}
+
+.page-footer-card {
+  margin-top: 16px;
+}
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.preset-btn {
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+  padding: 12px 14px;
+  color: var(--capriccio-ink);
+  text-align: left;
+  border-color: rgba(21, 51, 74, 0.16);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.preset-btn__title {
+  font-weight: 700;
+}
+
+.preset-btn__meta,
+.preset-btn__coords {
+  font-size: 0.84rem;
+  color: rgba(21, 51, 74, 0.76);
+}
+
+.system-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+
+.system-header-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.system-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.system-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.header-icon-btn {
+  color: rgba(21, 51, 74, 0.78);
+}
+
+.system-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.system-caption,
+.map-caption {
+  color: rgba(21, 51, 74, 0.78);
+  font-size: 0.88rem;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.map-canvas {
+  min-height: 620px;
+  border-radius: 18px 18px 0 0;
+}
+
+.map-caption {
+  padding: 12px 16px 16px;
+  font-size: 0.9rem;
+}
+
+.leaflet-container {
+  font: inherit;
+}
+
+.leaflet-control-attribution {
+  font-size: 11px;
+}
+
+@media (max-width: 1024px) {
+  .preset-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .map-canvas {
+    min-height: 460px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    padding: 16px;
+  }
+
+  .header-toolbar {
+    gap: 10px;
+  }
+
+  .toolbar-brand {
+    gap: 10px;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    gap: 6px;
+    max-width: 165px;
+  }
+
+  .toolbar-caption {
+    max-width: 100%;
+  }
+
+  .toolbar-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  .help-card__header,
+  .help-card__content,
+  .help-card__actions {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .preset-grid,
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .system-header {
+    gap: 10px;
+  }
+
+  .system-actions {
+    gap: 2px;
+  }
+
+  .system-title {
+    font-size: 0.95rem;
+  }
+}

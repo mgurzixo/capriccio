@@ -1,0 +1,132 @@
+import java.util.Properties
+
+apply plugin: 'com.android.application'
+
+def signingProperties = new Properties()
+def loadPropertiesIfPresent = { candidateFile ->
+    if (candidateFile.exists()) {
+        candidateFile.withInputStream { stream ->
+            signingProperties.load(stream)
+        }
+    }
+}
+
+loadPropertiesIfPresent(rootProject.file('local.properties'))
+loadPropertiesIfPresent(rootProject.file('../../../zik4/src-capacitor/android/local.properties'))
+
+def resolveSigningValue = { propertyKeys, envKeys, fallbackValue ->
+    for (def propertyKey : propertyKeys) {
+        def propertyValue = signingProperties.getProperty(propertyKey)
+        if (propertyValue != null && propertyValue.trim()) return propertyValue.trim()
+    }
+    for (def envKey : envKeys) {
+        def envValue = System.getenv(envKey)
+        if (envValue != null && envValue.trim()) return envValue.trim()
+    }
+    return fallbackValue
+}
+
+def resolvePathCandidate = { candidateText ->
+    def normalizedText = String.valueOf(candidateText).trim()
+    if (!normalizedText) return null
+    def explicitPath = new File(normalizedText)
+    if (explicitPath.isAbsolute()) return explicitPath
+    return file(normalizedText)
+}
+
+def resolveSigningFile = { candidates ->
+    for (def candidate : candidates) {
+        if (candidate == null) continue
+        def candidateText = String.valueOf(candidate).trim()
+        if (!candidateText) continue
+        def candidateFile = resolvePathCandidate(candidateText)
+        if (candidateFile.exists()) return candidateFile
+    }
+    return null
+}
+
+def signingStoreFile = resolveSigningFile([
+    resolveSigningValue(['capriccio.keystore.path', 'zonkod.keystore.path'], ['CAPRICCIO_KEYSTORE_PATH', 'ZONKOD_KEYSTORE_PATH'], null),
+])
+def signingStorePassword = resolveSigningValue(['capriccio.keystore.password', 'zonkod.keystore.password'], ['CAPRICCIO_KEYSTORE_PASSWORD', 'ZONKOD_KEYSTORE_PASSWORD'], null)
+def signingKeyAlias = resolveSigningValue(['capriccio.key.alias', 'zonkod.key.alias'], ['CAPRICCIO_KEY_ALIAS', 'ZONKOD_KEY_ALIAS'], null)
+def signingKeyPassword = resolveSigningValue(['capriccio.key.password', 'zonkod.key.password'], ['CAPRICCIO_KEY_PASSWORD', 'ZONKOD_KEY_PASSWORD'], signingStorePassword)
+def signingConfigured = signingStoreFile != null
+    && signingStorePassword != null
+    && signingKeyAlias != null
+    && signingKeyPassword != null
+
+android {
+    namespace = "org.capacitor.quasar.capriccio"
+    compileSdk = rootProject.ext.compileSdkVersion
+    installation {
+        enableBaselineProfile = false
+    }
+    defaultConfig {
+        applicationId "org.capacitor.quasar.capriccio"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~:baseline.prof:baseline.profm'
+        }
+        signingConfigs {
+            debug {
+                if (signingConfigured) {
+                    storeFile signingStoreFile
+                    storePassword signingStorePassword
+                    keyAlias signingKeyAlias
+                    keyPassword signingKeyPassword
+                }
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            if (signingConfigured) {
+                signingConfig signingConfigs.debug
+            }
+        }
+    }
+    packaging {
+        resources {
+            excludes += ['assets/dexopt/baseline.prof', 'assets/dexopt/baseline.profm']
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}
