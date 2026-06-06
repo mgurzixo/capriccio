@@ -119,6 +119,10 @@
           </p>
 
           <p>
+            <strong>Version:</strong> {{ appVersion }}
+          </p>
+
+          <p>
             <strong>Copyright:</strong> Michel Gouget 2026, gurzixo HAT platinn DOTT com.
           </p>
 
@@ -150,9 +154,11 @@
 <script setup>
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
+import packageInfo from '../../package.json';
 import capriccioLogo from 'src/assets/capriccio-logo.svg';
 
 const $q = useQuasar();
 const helpOpen = ref(false);
 const isAndroidCapacitor = $q.platform.is.capacitor === true && $q.platform.is.android === true;
+const appVersion = packageInfo.version;
 </script>

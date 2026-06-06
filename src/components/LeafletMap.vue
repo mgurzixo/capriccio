@@ -190,7 +190,8 @@ function zoomIn() {
     return;
   }
 
-  setZoom(targetZoom, { animate: true });
+  mapInstance.stop();
+  setZoom(targetZoom);
 }
 
 function zoomOut() {
@@ -204,7 +205,8 @@ function zoomOut() {
     return;
   }
 
-  setZoom(targetZoom, { animate: true });
+  mapInstance.stop();
+  setZoom(targetZoom);
 }
 
 function updateZoomFromPointer(clientY) {
@@ -296,7 +298,7 @@ onMounted(() => {
     minZoom,
     maxZoom,
     zoomSnap: 0,
-    zoomDelta: (maxZoom - minZoom) / sliderSteps,
+    zoomDelta: 1,
   }).setView([39.5, -8.0], 6);
 
   L.control.scale({

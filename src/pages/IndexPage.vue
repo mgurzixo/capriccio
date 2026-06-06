@@ -176,7 +176,6 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { copyToClipboard, useQuasar } from 'quasar';
-import { Clipboard } from '@capacitor/clipboard';
 import LeafletMap from 'components/LeafletMap.vue';
 import { summaryState } from 'src/lib/summaryState';
 import {
@@ -383,7 +382,10 @@ async function pasteGroup(group) {
 
 async function readClipboardText() {
   if ($q.platform.is.capacitor === true && $q.platform.is.android === true) {
-    const clipboardData = await Clipboard.read();
+    const clipboardPlugin = window.Capacitor?.Plugins?.Clipboard;
+
+    if (clipboardPlugin?.read) {
+      const clipboardData = await clipboardPlugin.read();
     const nativeText = [
       clipboardData?.value,
       clipboardData?.string,
@@ -391,8 +393,9 @@ async function readClipboardText() {
       clipboardData?.url,
     ].find((value) => typeof value === 'string' && value.trim().length > 0);
 
-    if (nativeText) {
-      return nativeText;
+      if (nativeText) {
+        return nativeText;
+      }
     }
   }
 
