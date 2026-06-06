@@ -96,41 +96,48 @@ body {
 }
 
 .help-card {
-  width: min(720px, calc(100vw - 32px));
+  width: min(980px, calc(100vw - 32px));
+  max-height: min(90vh, 1040px);
   border-radius: 22px;
   background: linear-gradient(180deg, rgba(255, 249, 239, 0.99), rgba(243, 235, 221, 0.97));
   color: var(--capriccio-ink);
   box-shadow: 0 24px 64px rgba(21, 51, 74, 0.28);
 }
 
+.help-dialog .q-dialog__inner--minimized > div {
+  width: min(980px, calc(100vw - 32px));
+  max-width: min(980px, calc(100vw - 32px));
+}
+
 .help-card__header {
-  padding: 18px 20px 8px;
+  padding: 20px 24px 10px;
 }
 
 .help-card__title {
-  font-size: 1.2rem;
+  font-size: 1.38rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .help-card__subtitle {
-  font-size: 0.9rem;
+  font-size: 1.04rem;
   color: rgba(21, 51, 74, 0.76);
 }
 
 .help-card__content {
-  padding: 8px 20px 8px;
-  font-size: 0.96rem;
-  line-height: 1.55;
+  padding: 10px 24px 10px;
+  overflow: auto;
+  font-size: 1.1rem;
+  line-height: 1.74;
 }
 
 .help-card__content p {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
 }
 
 .help-card__actions {
-  padding: 0 20px 18px;
+  padding: 0 24px 20px;
 }
 
 .page-shell {
@@ -141,13 +148,17 @@ body {
   display: grid;
   grid-template-columns: minmax(300px, 420px) minmax(320px, 1fr);
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .panel-stack,
 .map-stack {
   display: grid;
   gap: 14px;
+}
+
+.map-stack {
+  height: 100%;
 }
 
 .system-card,
@@ -165,6 +176,23 @@ body {
 
 .compact-actions {
   padding: 0 14px 12px;
+}
+
+.system-action-btn {
+  color: #fff9f1;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: linear-gradient(135deg, var(--capriccio-ink), #29516f 72%);
+  box-shadow: 0 8px 18px rgba(21, 51, 74, 0.2);
+}
+
+.system-action-btn::before {
+  box-shadow: inset 0 0 0 1px rgba(215, 164, 65, 0.26);
+}
+
+.system-action-btn:hover,
+.system-action-btn:focus-visible {
+  background: linear-gradient(135deg, #1a3d57, #35617f 72%);
 }
 
 .accent-card {
@@ -261,8 +289,13 @@ body {
 }
 
 .map-canvas {
+  height: 100%;
   min-height: 620px;
   border-radius: 18px 18px 0 0;
+}
+
+.map-card {
+  height: 100%;
 }
 
 .map-caption {
@@ -285,9 +318,16 @@ body {
 
   .page-grid {
     grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .map-stack,
+  .map-card {
+    height: auto;
   }
 
   .map-canvas {
+    height: auto;
     min-height: 460px;
   }
 }

@@ -15,7 +15,7 @@
           </q-toolbar-title>
 
           <div class="header-actions">
-            <div class="toolbar-caption">EPSG:4326 · EPSG:3763 · M/P</div>
+            <div class="toolbar-caption">EPSG:4326 · EPSG:3763 · C.A.P. M/P · Gauss X/Y</div>
             <q-btn flat no-caps dense class="header-help-btn" icon="help_outline" label="Help"
               @click="helpOpen = true" />
           </div>
@@ -23,8 +23,8 @@
       </div>
     </q-header>
 
-    <q-dialog v-model="helpOpen">
-      <q-card class="help-card">
+    <q-dialog v-model="helpOpen" class="help-dialog">
+      <q-card class="help-card full-width">
         <q-card-section class="help-card__header row items-start no-wrap">
           <div class="col">
             <div class="help-card__title">Capriccio Help</div>
@@ -37,8 +37,8 @@
           <p>
             <strong>Presentation of the app</strong><br />
             Capriccio helps you work with location points used in
-            Portuguese archaeology. It lets you read, convert, and compare the same place in three different
-            coordinate systems.
+            Portuguese archaeology. It lets you read, convert, and compare the same place across four input cards:
+            two modern coordinate reference systems and two legacy archaeological notations.
           </p>
 
           <p>
@@ -49,20 +49,24 @@
           </p>
 
           <p>
-            <strong>The three coordinate systems</strong><br />
+            <strong>The four formats used by the app</strong><br />
             <strong>EPSG:4326</strong> called also <strong>WGS84</strong> is the common latitude and longitude format
             used by GPS and online maps.<br />
             <strong>EPSG:3763</strong> is <strong>ETRS89</strong> / <strong>Portugal TM06</strong>, a metric coordinate
             system used in some Portuguese mapping.<br />
-            <strong>Book M / P</strong> is the shorthand style found in older archaeological publications and field
-            references.
+            <strong>Carta Arqueológica de Portugal M / P</strong> is the shorthand style printed in the
+            <strong>Carta Arqueológica de Portugal</strong> volumes and reused in archaeological notes and field
+            references.<br />
+            <strong>Gauss X / Y</strong> is the military-map notation found in archaeological material such as the
+            1996 OPHIUSSA article and related references that cite Portuguese military maps at
+            <strong>1:25 000</strong>.
           </p>
 
           <p>
             <strong>App functionality</strong><br />
-            You can type coordinates in any of the three sections, paste them
-            from the clipboard, convert them to the other two systems, copy the result, use sample presets,
-            and click on the map to pick a point. When you click the map, the marker moves and all three
+            You can type coordinates in any of the four sections, paste them
+            from the clipboard, convert them to the other formats, copy the result, use sample presets,
+            and click on the map to pick a point. When you click the map, the marker moves and all four
             coordinate sections are updated automatically.
           </p>
 
@@ -72,30 +76,58 @@
             37.1388155, -8.5385212.<br />
             <strong>EPSG:3763</strong> paste expects easting then northing, for example
             -6644.124, -109920.925.<br />
-            <strong>Book M / P</strong>: paste expects the book pair, for example M-230.5 P-013.6.
+            <strong>Carta Arqueológica de Portugal M / P</strong>: paste expects the Carta Arqueológica de Portugal
+            pair, for example M-230.5 P-013.6.<br />
+            <strong>Gauss X / Y</strong>: paste expects the military map pair, for example X 638.4; Y 4119.6,
+            X 628.8; Y 4113.6, or X 629.2; Y 4113.5.
           </p>
 
           <p>
-            <strong>Technical note on Book M / P</strong><br />
-            The book notation does not have its own public EPSG code. In this app it is treated as a shorthand for an
-            older <strong>Hayford-Gauss / Datum Lisboa</strong> projected grid, implemented with a
+            <strong>Technical documentation for the two legacy archaeological formats</strong><br />
+            <strong>1. Carta Arqueológica de Portugal M / P</strong><br />
+            This is the compact notation used in the published volumes of the
+            <strong>Carta Arqueológica de Portugal</strong>. In those books the coordinate pair is usually written as
+            <strong>M</strong> and <strong>P</strong>, for example <strong>M-230.5 P-013.6</strong>. In practice this is
+            a
+            shorthand way of writing positions on an older projected grid rather than a modern EPSG-labelled
+            format.<br />
+            <strong>2. Gauss X / Y</strong><br />
+            This is the notation found in archaeological references tied to the Portuguese military maps, including the
+            1996 OPHIUSSA paper discussed during the preparation of this app. In those references the pair is written as
+            <strong>X</strong> and <strong>Y</strong>, for example <strong>X 638.4; Y 4119.6</strong>.<br />
+            <strong>Underlying technical system</strong><br />
+            Both notations are treated here as two ways of writing the same older
+            <strong>Hayford-Gauss / Datum Lisboa</strong> projected grid. That grid is implemented in the app with a
             <strong>Transverse Mercator</strong> definition in <strong>proj4</strong> using an
-            <strong>ESRI:102164-style</strong> parameter set. The conversion path used by the app is therefore
-            <strong>Book M / P ⇄ Hayford-Gauss / Datum Lisboa ⇄ WGS84 / EPSG:4326</strong>, and from there to
-            <strong>ETRS89 / Portugal TM06 / EPSG:3763</strong>. The algorithm used here comes from those embedded
-            projection parameters rather than from a dedicated official specification for the shorthand itself.
+            <strong>ESRI:102164-style</strong> parameter set. It is not presented as a separate user card because the
+            user-facing need is to decode the published archaeological notations, not to expose another technical CRS
+            identifier.<br />
+            <strong>Difference between M / P and X / Y</strong><br />
+            The difference is the notation, not the base map projection. The
+            <strong>Carta Arqueológica de Portugal</strong> shorthand uses <strong>M / P</strong>, while the
+            military-map
+            archaeological references use <strong>X / Y</strong>. In this app the relation is handled as a fixed shift
+            in
+            kilometre notation: <strong>M = X - 400</strong> and <strong>P = Y - 4100</strong>. That means
+            <strong>Gauss X / Y</strong> and <strong>Carta Arqueológica de Portugal M / P</strong> describe the same
+            underlying grid location, but with different labels and offsets.<br />
+            <strong>Conversion path used by Capriccio</strong><br />
+            <strong>M / P or X / Y ⇄ Hayford-Gauss / Datum Lisboa ⇄ WGS84 / EPSG:4326 ⇄ ETRS89 / Portugal TM06 /
+              EPSG:3763</strong>.<br />
+            This means the app first normalizes the legacy archaeological notation, then converts through the older
+            Hayford-Gauss / Datum Lisboa grid, then derives WGS84 and TM06 outputs from that result.
           </p>
 
           <p>
-            <strong>Copyright.</strong> Michel Gouget 2026, gurzixo AT platinn DOT com.
+            <strong>Copyright:</strong> Michel Gouget 2026, gurzixo HAT platinn DOTT com.
           </p>
 
           <p>
-            <strong>License.</strong> MIT.
+            <strong>License:</strong> MIT.
           </p>
 
           <p>
-            <strong>Repository.</strong>
+            <strong>Repository:</strong>
             <a href="https://github.com/mgurzixo/capriccio" target="_blank" rel="noopener noreferrer">
               https://github.com/mgurzixo/capriccio
             </a>
@@ -104,7 +136,7 @@
         </q-card-section>
 
         <q-card-actions align="right" class="help-card__actions">
-          <q-btn color="primary" label="Close" @click="helpOpen = false" />
+          <q-btn class="system-action-btn" label="Close" @click="helpOpen = false" />
         </q-card-actions>
       </q-card>
     </q-dialog>

@@ -3,6 +3,8 @@ import proj4 from 'proj4'
 const EPSG4326 = 'EPSG:4326'
 const EPSG3763 = 'EPSG:3763'
 const HAYFORD_GAUSS = 'ESRI:102164'
+const GAUSS_X_OFFSET = 400
+const GAUSS_Y_OFFSET = 4100
 
 proj4.defs(
   EPSG3763,
@@ -46,6 +48,11 @@ function assertLatLon(latitude, longitude) {
 function toBookMeters(value, label) {
   const parsed = parseNumber(value, label)
   return Math.abs(parsed) < 1000 ? parsed * 1000 : parsed
+}
+
+function toGaussKilometers(value, label) {
+  const parsed = parseNumber(value, label)
+  return Math.abs(parsed) >= 10000 ? parsed / 1000 : parsed
 }
 
 export function from4326(latitudeValue, longitudeValue) {
@@ -92,6 +99,13 @@ export function fromBookCoordinates(meridianaValue, perpendicularValue) {
   return from4326(latitude, longitude)
 }
 
+export function fromGaussCoordinates(xValue, yValue) {
+  const x = toGaussKilometers(xValue, 'Gauss X')
+  const y = toGaussKilometers(yValue, 'Gauss Y')
+
+  return fromBookCoordinates(x - GAUSS_X_OFFSET, y - GAUSS_Y_OFFSET)
+}
+
 export function formatLatLon(value) {
   return value.toFixed(6)
 }
@@ -106,6 +120,15 @@ export function formatBookShort(value) {
 
 export function formatBookLabel(meridiana, perpendicular) {
   return `M-${formatBookShort(meridiana)} P-${formatBookShort(perpendicular)}`
+}
+
+export function formatGaussShort(value, axis) {
+  const offset = axis === 'x' ? GAUSS_X_OFFSET : GAUSS_Y_OFFSET
+  return (value / 1000 + offset).toFixed(1)
+}
+
+export function formatGaussLabel(meridiana, perpendicular) {
+  return `X ${formatGaussShort(meridiana, 'x')}; Y ${formatGaussShort(perpendicular, 'y')}`
 }
 
 export function parseCoordinateText(text) {
@@ -126,8 +149,18 @@ export function normalizeBookValue(value) {
   return formatBookShort(meters)
 }
 
+export function normalizeGaussValue(value, axis) {
+  return toGaussKilometers(value, axis === 'x' ? 'Gauss X' : 'Gauss Y').toFixed(1)
+}
+
 export function formatBookText(meridianaValue, perpendicularValue) {
   const meridiana = toBookMeters(meridianaValue, 'Book M')
   const perpendicular = toBookMeters(perpendicularValue, 'Book P')
   return formatBookLabel(meridiana, perpendicular)
+}
+
+export function formatGaussText(meridianaValue, perpendicularValue) {
+  const meridiana = toBookMeters(meridianaValue, 'Book M')
+  const perpendicular = toBookMeters(perpendicularValue, 'Book P')
+  return formatGaussLabel(meridiana, perpendicular)
 }

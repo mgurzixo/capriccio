@@ -32,7 +32,7 @@
           </q-card-section>
 
           <q-card-actions align="right" class="compact-actions">
-            <q-btn color="primary" label="Use EPSG:4326" @click="convertFrom('wgs84')">
+            <q-btn class="system-action-btn" label="Use EPSG:4326" @click="convertFrom('wgs84')">
               <q-tooltip>Convert from latitude and longitude</q-tooltip>
             </q-btn>
           </q-card-actions>
@@ -68,13 +68,13 @@
           </q-card-section>
 
           <q-card-actions align="right" class="compact-actions">
-            <q-btn color="secondary" label="Use EPSG:3763" @click="convertFrom('tm06')">
+            <q-btn class="system-action-btn" label="Use EPSG:3763" @click="convertFrom('tm06')">
               <q-tooltip>Convert from Portugal TM06 coordinates</q-tooltip>
             </q-btn>
           </q-card-actions>
         </q-card>
 
-        <q-card class="system-card accent-card compact-card">
+        <q-card class="system-card compact-card">
           <q-card-section class="system-header">
             <div class="system-header-main">
               <div class="system-header-row">
@@ -90,7 +90,7 @@
                   </q-btn>
                 </div>
               </div>
-              <div class="system-caption">Book shorthand</div>
+              <div class="system-caption">Carta Arquelógica de Portugal</div>
             </div>
           </q-card-section>
 
@@ -104,8 +104,44 @@
           </q-card-section>
 
           <q-card-actions align="right" class="compact-actions">
-            <q-btn color="accent" label="Decode Book Coords" @click="convertFrom('book')">
+            <q-btn class="system-action-btn" label="Decode C.A.P." @click="convertFrom('book')">
               <q-tooltip>Convert from book M and P coordinates</q-tooltip>
+            </q-btn>
+          </q-card-actions>
+        </q-card>
+
+        <q-card class="system-card compact-card">
+          <q-card-section class="system-header">
+            <div class="system-header-main">
+              <div class="system-header-row">
+                <div class="system-title">Gauss X / Y</div>
+                <div class="system-actions">
+                  <q-btn flat round dense class="header-icon-btn" icon="content_paste" aria-label="Paste Gauss X/Y"
+                    @click="pasteGroup('gauss')">
+                    <q-tooltip>Paste Gauss X and Y values from the clipboard</q-tooltip>
+                  </q-btn>
+                  <q-btn flat round dense class="header-icon-btn" icon="content_copy" aria-label="Copy Gauss X/Y"
+                    @click="copyGroup('gauss')">
+                    <q-tooltip>Copy Gauss X and Y values to the clipboard</q-tooltip>
+                  </q-btn>
+                </div>
+              </div>
+              <div class="system-caption">Carta Militar 1:25 000 Gauss</div>
+            </div>
+          </q-card-section>
+
+          <q-card-section class="field-grid">
+            <q-input v-model="form.gauss.x" dense outlined label="X">
+              <q-tooltip>Enter the Gauss X value from the military map notation</q-tooltip>
+            </q-input>
+            <q-input v-model="form.gauss.y" dense outlined label="Y">
+              <q-tooltip>Enter the Gauss Y value from the military map notation</q-tooltip>
+            </q-input>
+          </q-card-section>
+
+          <q-card-actions align="right" class="compact-actions">
+            <q-btn class="system-action-btn" label="Decode OPHIUSSA" @click="convertFrom('gauss')">
+              <q-tooltip>Convert from Gauss X and Y coordinates</q-tooltip>
             </q-btn>
           </q-card-actions>
         </q-card>
@@ -144,15 +180,19 @@ import { Clipboard } from '@capacitor/clipboard';
 import LeafletMap from 'components/LeafletMap.vue';
 import { summaryState } from 'src/lib/summaryState';
 import {
+  formatGaussText,
+  formatGaussShort,
   formatBookLabel,
   formatBookShort,
   formatBookText,
   formatLatLon,
   formatMeters,
+  fromGaussCoordinates,
   from3763,
   from4326,
   fromBookCoordinates,
   normalizeBookValue,
+  normalizeGaussValue,
   parseCoordinateText,
 } from 'src/lib/coordinates';
 
@@ -170,6 +210,10 @@ const form = reactive({
   book: {
     meridiana: '',
     perpendicular: '',
+  },
+  gauss: {
+    x: '',
+    y: '',
   },
 });
 
@@ -204,6 +248,27 @@ const samplePresets = [
     perpendicular: '10.9',
     coords: 'M-224.1 P-010.9',
   },
+  {
+    title: 'Leziria',
+    subtitle: 'OPHIUSSA 1996 · Castro Marim',
+    meridiana: '238.4',
+    perpendicular: '19.6',
+    coords: 'X 638.4; Y 4119.6',
+  },
+  {
+    title: 'Quinta do Muro',
+    subtitle: 'OPHIUSSA 1996 · Cacela',
+    meridiana: '228.8',
+    perpendicular: '13.6',
+    coords: 'X 628.8; Y 4113.6',
+  },
+  {
+    title: 'Cacela',
+    subtitle: 'OPHIUSSA 1996 · Cacela',
+    meridiana: '229.2',
+    perpendicular: '13.5',
+    coords: 'X 629.2; Y 4113.5',
+  },
 ];
 
 function notify(type, message) {
@@ -221,6 +286,8 @@ function applyResult(result) {
   form.tm06.northing = formatMeters(result.tm06.northing);
   form.book.meridiana = formatBookShort(result.book.meridiana);
   form.book.perpendicular = formatBookShort(result.book.perpendicular);
+  form.gauss.x = formatGaussShort(result.book.meridiana, 'x');
+  form.gauss.y = formatGaussShort(result.book.perpendicular, 'y');
 
   summaryState.wgs84 = `${formatLatLon(result.wgs84.latitude)}, ${formatLatLon(result.wgs84.longitude)}`;
   summaryState.tm06 = `${formatMeters(result.tm06.easting)}, ${formatMeters(result.tm06.northing)}`;
@@ -241,6 +308,8 @@ function convertFrom(source) {
       result = from4326(form.wgs84.latitude, form.wgs84.longitude);
     } else if (source === 'tm06') {
       result = from3763(form.tm06.easting, form.tm06.northing);
+    } else if (source === 'gauss') {
+      result = fromGaussCoordinates(form.gauss.x, form.gauss.y);
     } else {
       result = fromBookCoordinates(form.book.meridiana, form.book.perpendicular);
     }
@@ -274,6 +343,8 @@ async function copyGroup(group) {
       text = `${form.wgs84.latitude}, ${form.wgs84.longitude}`;
     } else if (group === 'tm06') {
       text = `${form.tm06.easting}, ${form.tm06.northing}`;
+    } else if (group === 'gauss') {
+      text = formatGaussText(form.book.meridiana, form.book.perpendicular);
     } else {
       text = formatBookText(form.book.meridiana, form.book.perpendicular);
     }
@@ -296,6 +367,9 @@ async function pasteGroup(group) {
     } else if (group === 'tm06') {
       form.tm06.easting = String(first);
       form.tm06.northing = String(second);
+    } else if (group === 'gauss') {
+      form.gauss.x = normalizeGaussValue(first, 'x');
+      form.gauss.y = normalizeGaussValue(second, 'y');
     } else {
       form.book.meridiana = normalizeBookValue(first);
       form.book.perpendicular = normalizeBookValue(second);
