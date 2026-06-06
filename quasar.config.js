@@ -4,6 +4,8 @@
 import { defineConfig } from '#q-app/wrappers'
 
 export default defineConfig((/* ctx */) => {
+  const isGitHubPagesBuild = process.env.GITHUB_PAGES === 'true'
+
   return {
     bin: {
       linuxAndroidStudio: '/home/mgouget/android-studio/bin/studio.sh',
@@ -43,13 +45,13 @@ export default defineConfig((/* ctx */) => {
       },
 
       vueRouterMode: 'hash', // available values: 'hash', 'history'
+      publicPath: isGitHubPagesBuild ? '/capriccio/' : '/',
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
       // analyze: true,
       // env: {},
       // rawDefine: {}

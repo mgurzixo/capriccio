@@ -8,26 +8,12 @@
               <div class="system-header-row">
                 <div class="system-title">EPSG:4326</div>
                 <div class="system-actions">
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_paste"
-                    aria-label="Paste EPSG:4326"
-                    @click="pasteGroup('wgs84')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_paste" aria-label="Paste EPSG:4326"
+                    @click="pasteGroup('wgs84')">
                     <q-tooltip>Paste latitude and longitude from the clipboard</q-tooltip>
                   </q-btn>
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_copy"
-                    aria-label="Copy EPSG:4326"
-                    @click="copyGroup('wgs84')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_copy" aria-label="Copy EPSG:4326"
+                    @click="copyGroup('wgs84')">
                     <q-tooltip>Copy latitude and longitude to the clipboard</q-tooltip>
                   </q-btn>
                 </div>
@@ -58,26 +44,12 @@
               <div class="system-header-row">
                 <div class="system-title">EPSG:3763</div>
                 <div class="system-actions">
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_paste"
-                    aria-label="Paste EPSG:3763"
-                    @click="pasteGroup('tm06')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_paste" aria-label="Paste EPSG:3763"
+                    @click="pasteGroup('tm06')">
                     <q-tooltip>Paste easting and northing from the clipboard</q-tooltip>
                   </q-btn>
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_copy"
-                    aria-label="Copy EPSG:3763"
-                    @click="copyGroup('tm06')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_copy" aria-label="Copy EPSG:3763"
+                    @click="copyGroup('tm06')">
                     <q-tooltip>Copy easting and northing to the clipboard</q-tooltip>
                   </q-btn>
                 </div>
@@ -108,26 +80,12 @@
               <div class="system-header-row">
                 <div class="system-title">Book M / P</div>
                 <div class="system-actions">
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_paste"
-                    aria-label="Paste book coordinates"
-                    @click="pasteGroup('book')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_paste"
+                    aria-label="Paste book coordinates" @click="pasteGroup('book')">
                     <q-tooltip>Paste book M and P values from the clipboard</q-tooltip>
                   </q-btn>
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_copy"
-                    aria-label="Copy book coordinates"
-                    @click="copyGroup('book')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_copy" aria-label="Copy book coordinates"
+                    @click="copyGroup('book')">
                     <q-tooltip>Copy book M and P values to the clipboard</q-tooltip>
                   </q-btn>
                 </div>
@@ -167,14 +125,8 @@
       </q-card-section>
 
       <q-card-section class="preset-grid">
-        <q-btn
-          v-for="preset in samplePresets"
-          :key="preset.title"
-          outline
-          no-caps
-          class="preset-btn"
-          @click="applyPreset(preset)"
-        >
+        <q-btn v-for="preset in samplePresets" :key="preset.title" outline no-caps class="preset-btn"
+          @click="applyPreset(preset)">
           <div class="preset-btn__title">{{ preset.title }}</div>
           <div class="preset-btn__meta">{{ preset.subtitle }}</div>
           <div class="preset-btn__coords">{{ preset.coords }}</div>
@@ -186,10 +138,11 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { copyToClipboard, useQuasar } from 'quasar'
-import LeafletMap from 'components/LeafletMap.vue'
-import { summaryState } from 'src/lib/summaryState'
+import { reactive, ref } from 'vue';
+import { copyToClipboard, useQuasar } from 'quasar';
+import { Clipboard } from '@capacitor/clipboard';
+import LeafletMap from 'components/LeafletMap.vue';
+import { summaryState } from 'src/lib/summaryState';
 import {
   formatBookLabel,
   formatBookShort,
@@ -201,9 +154,9 @@ import {
   fromBookCoordinates,
   normalizeBookValue,
   parseCoordinateText,
-} from 'src/lib/coordinates'
+} from 'src/lib/coordinates';
 
-const $q = useQuasar()
+const $q = useQuasar();
 
 const form = reactive({
   wgs84: {
@@ -218,9 +171,9 @@ const form = reactive({
     meridiana: '',
     perpendicular: '',
   },
-})
+});
 
-const mapPoint = ref(null)
+const mapPoint = ref(null);
 
 const samplePresets = [
   {
@@ -251,106 +204,128 @@ const samplePresets = [
     perpendicular: '10.9',
     coords: 'M-224.1 P-010.9',
   },
-]
+];
 
 function notify(type, message) {
   $q.notify({
     type,
     message,
     position: 'top-right',
-  })
+  });
 }
 
 function applyResult(result) {
-  form.wgs84.latitude = formatLatLon(result.wgs84.latitude)
-  form.wgs84.longitude = formatLatLon(result.wgs84.longitude)
-  form.tm06.easting = formatMeters(result.tm06.easting)
-  form.tm06.northing = formatMeters(result.tm06.northing)
-  form.book.meridiana = formatBookShort(result.book.meridiana)
-  form.book.perpendicular = formatBookShort(result.book.perpendicular)
+  form.wgs84.latitude = formatLatLon(result.wgs84.latitude);
+  form.wgs84.longitude = formatLatLon(result.wgs84.longitude);
+  form.tm06.easting = formatMeters(result.tm06.easting);
+  form.tm06.northing = formatMeters(result.tm06.northing);
+  form.book.meridiana = formatBookShort(result.book.meridiana);
+  form.book.perpendicular = formatBookShort(result.book.perpendicular);
 
-  summaryState.wgs84 = `${formatLatLon(result.wgs84.latitude)}, ${formatLatLon(result.wgs84.longitude)}`
-  summaryState.tm06 = `${formatMeters(result.tm06.easting)}, ${formatMeters(result.tm06.northing)}`
-  summaryState.book = formatBookLabel(result.book.meridiana, result.book.perpendicular)
+  summaryState.wgs84 = `${formatLatLon(result.wgs84.latitude)}, ${formatLatLon(result.wgs84.longitude)}`;
+  summaryState.tm06 = `${formatMeters(result.tm06.easting)}, ${formatMeters(result.tm06.northing)}`;
+  summaryState.book = formatBookLabel(result.book.meridiana, result.book.perpendicular);
 
   mapPoint.value = {
     latitude: result.mapPoint.latitude,
     longitude: result.mapPoint.longitude,
     label: `${formatLatLon(result.mapPoint.latitude)}, ${formatLatLon(result.mapPoint.longitude)}`,
-  }
+  };
 }
 
 function convertFrom(source) {
   try {
-    let result
+    let result;
 
     if (source === 'wgs84') {
-      result = from4326(form.wgs84.latitude, form.wgs84.longitude)
+      result = from4326(form.wgs84.latitude, form.wgs84.longitude);
     } else if (source === 'tm06') {
-      result = from3763(form.tm06.easting, form.tm06.northing)
+      result = from3763(form.tm06.easting, form.tm06.northing);
     } else {
-      result = fromBookCoordinates(form.book.meridiana, form.book.perpendicular)
+      result = fromBookCoordinates(form.book.meridiana, form.book.perpendicular);
     }
 
-    applyResult(result)
-    notify('positive', 'Coordinates converted successfully.')
+    applyResult(result);
+    notify('positive', 'Coordinates converted successfully.');
   } catch (error) {
-    notify('negative', error.message)
+    notify('negative', error.message);
   }
 }
 
 function updateFromMapClick(point) {
   try {
-    applyResult(from4326(point.latitude, point.longitude))
+    applyResult(from4326(point.latitude, point.longitude));
   } catch (error) {
-    notify('negative', error.message)
+    notify('negative', error.message);
   }
 }
 
 function applyPreset(preset) {
-  form.book.meridiana = preset.meridiana
-  form.book.perpendicular = preset.perpendicular
-  convertFrom('book')
+  form.book.meridiana = preset.meridiana;
+  form.book.perpendicular = preset.perpendicular;
+  convertFrom('book');
 }
 
 async function copyGroup(group) {
   try {
-    let text
+    let text;
 
     if (group === 'wgs84') {
-      text = `${form.wgs84.latitude}, ${form.wgs84.longitude}`
+      text = `${form.wgs84.latitude}, ${form.wgs84.longitude}`;
     } else if (group === 'tm06') {
-      text = `${form.tm06.easting}, ${form.tm06.northing}`
+      text = `${form.tm06.easting}, ${form.tm06.northing}`;
     } else {
-      text = formatBookText(form.book.meridiana, form.book.perpendicular)
+      text = formatBookText(form.book.meridiana, form.book.perpendicular);
     }
 
-    await copyToClipboard(text)
-    notify('positive', 'Coordinates copied to the clipboard.')
+    await copyToClipboard(text);
+    notify('positive', 'Coordinates copied to the clipboard.');
   } catch (error) {
-    notify('negative', error.message || 'Unable to copy coordinates.')
+    notify('negative', error.message || 'Unable to copy coordinates.');
   }
 }
 
 async function pasteGroup(group) {
   try {
-    const text = await navigator.clipboard.readText()
-    const [first, second] = parseCoordinateText(text)
+    const text = await readClipboardText();
+    const [first, second] = parseCoordinateText(text);
 
     if (group === 'wgs84') {
-      form.wgs84.latitude = String(first)
-      form.wgs84.longitude = String(second)
+      form.wgs84.latitude = String(first);
+      form.wgs84.longitude = String(second);
     } else if (group === 'tm06') {
-      form.tm06.easting = String(first)
-      form.tm06.northing = String(second)
+      form.tm06.easting = String(first);
+      form.tm06.northing = String(second);
     } else {
-      form.book.meridiana = normalizeBookValue(first)
-      form.book.perpendicular = normalizeBookValue(second)
+      form.book.meridiana = normalizeBookValue(first);
+      form.book.perpendicular = normalizeBookValue(second);
     }
 
-    notify('positive', 'Coordinates pasted from the clipboard.')
+    notify('positive', 'Coordinates pasted from the clipboard.');
   } catch (error) {
-    notify('negative', error.message || 'Unable to read the clipboard.')
+    notify('negative', error.message || 'Unable to read the clipboard.');
   }
+}
+
+async function readClipboardText() {
+  if ($q.platform.is.capacitor === true && $q.platform.is.android === true) {
+    const clipboardData = await Clipboard.read();
+    const nativeText = [
+      clipboardData?.value,
+      clipboardData?.string,
+      clipboardData?.text,
+      clipboardData?.url,
+    ].find((value) => typeof value === 'string' && value.trim().length > 0);
+
+    if (nativeText) {
+      return nativeText;
+    }
+  }
+
+  if (navigator.clipboard?.readText) {
+    return navigator.clipboard.readText();
+  }
+
+  throw new Error('Clipboard read is not available on this platform.');
 }
 </script>

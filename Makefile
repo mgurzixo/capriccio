@@ -18,8 +18,7 @@ devandroid: ensure-capacitor
 	$(QUASAR) dev -m capacitor -T android
 
 buildandroid: ensure-android-platform
-	$(QUASAR) build -m capacitor -T android
-	(cd src-capacitor && CAPACITOR_ANDROID_STUDIO_PATH="$(CAPACITOR_ANDROID_STUDIO_PATH)" $(CAPACITOR) open android)
+	$(QUASAR) build -m capacitor -T android --ide
 
 ensure-electron:
 	@test -d src-electron || $(QUASAR) mode add electron
