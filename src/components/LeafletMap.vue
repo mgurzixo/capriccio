@@ -159,12 +159,38 @@ function setZoom(nextZoom, options = {}) {
   mapInstance.setZoom(clampedZoom, options);
 }
 
+function getClampedIntegerZoom(direction) {
+  if (!mapInstance) {
+    return minZoom;
+  }
+
+  const currentZoom = mapInstance.getZoom();
+  const nearestIntegerZoom = Math.round(currentZoom);
+  const isIntegerZoom = Math.abs(currentZoom - nearestIntegerZoom) < 0.000001;
+
+  let nextZoom;
+
+  if (direction > 0) {
+    nextZoom = isIntegerZoom ? nearestIntegerZoom + 1 : Math.ceil(currentZoom);
+  } else {
+    nextZoom = isIntegerZoom ? nearestIntegerZoom - 1 : Math.floor(currentZoom);
+  }
+
+  return Math.min(maxZoom, Math.max(minZoom, nextZoom));
+}
+
 function zoomIn() {
   if (!mapInstance) {
     return;
   }
 
-  mapInstance.zoomIn();
+  const targetZoom = getClampedIntegerZoom(1);
+
+  if (targetZoom === mapInstance.getZoom()) {
+    return;
+  }
+
+  setZoom(targetZoom, { animate: true });
 }
 
 function zoomOut() {
@@ -172,7 +198,13 @@ function zoomOut() {
     return;
   }
 
-  mapInstance.zoomOut();
+  const targetZoom = getClampedIntegerZoom(-1);
+
+  if (targetZoom === mapInstance.getZoom()) {
+    return;
+  }
+
+  setZoom(targetZoom, { animate: true });
 }
 
 function updateZoomFromPointer(clientY) {
