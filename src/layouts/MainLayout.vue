@@ -82,6 +82,14 @@
           <p>
             <strong>License.</strong> MIT.
           </p>
+
+          <p>
+            <strong>Repository.</strong>
+            <a href="https://github.com/mgurzixo/capriccio" target="_blank" rel="noopener noreferrer">
+              https://github.com/mgurzixo/capriccio
+            </a>
+          </p>
+
         </q-card-section>
 
         <q-card-actions align="right" class="help-card__actions">
