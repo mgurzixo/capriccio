@@ -76,6 +76,17 @@
           </p>
 
           <p>
+            <strong>Technical note on Book M / P</strong><br />
+            The book notation does not have its own public EPSG code. In this app it is treated as a shorthand for an
+            older <strong>Hayford-Gauss / Datum Lisboa</strong> projected grid, implemented with a
+            <strong>Transverse Mercator</strong> definition in <strong>proj4</strong> using an
+            <strong>ESRI:102164-style</strong> parameter set. The conversion path used by the app is therefore
+            <strong>Book M / P ⇄ Hayford-Gauss / Datum Lisboa ⇄ WGS84 / EPSG:4326</strong>, and from there to
+            <strong>ETRS89 / Portugal TM06 / EPSG:3763</strong>. The algorithm used here comes from those embedded
+            projection parameters rather than from a dedicated official specification for the shorthand itself.
+          </p>
+
+          <p>
             <strong>Copyright.</strong> Michel Gouget 2026, gurzixo AT platinn DOT com.
           </p>
 
