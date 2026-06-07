@@ -477,12 +477,12 @@ export const algarveArchaeologicalSites = [
     duplicateCount: 1,
   },
   {
-    id: 'node/1814943678',
+    id: 'node/1814943683',
     name: 'Necrópole da Pedreirinha',
     municipality: 'São Bartolomeu de Messines',
     parish: 'Figueirinhas',
-    latitude: 37.249367,
-    longitude: -8.338849,
+    latitude: 37.2503288,
+    longitude: -8.3383016,
     duplicateCount: 3,
   },
   {
