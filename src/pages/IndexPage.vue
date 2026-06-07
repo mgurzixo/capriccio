@@ -182,7 +182,7 @@
                   </q-btn>
                 </div>
               </div>
-              <div class="system-caption">Carta Militar 1:25 000 Gauss</div>
+              <div class="system-caption">Carta Militar 1:25 000 / UTM 29 ED50</div>
             </div>
           </q-card-section>
 
@@ -282,6 +282,7 @@ const mapPoint = ref(null)
 
 const samplePresets = [
   {
+    source: 'book',
     title: 'Moncarapacho',
     subtitle: 'Represa · Romano',
     meridiana: '230.5',
@@ -289,6 +290,7 @@ const samplePresets = [
     coords: 'M-230.5 P-013.6',
   },
   {
+    source: 'book',
     title: 'Horta do Padre Graca',
     subtitle: 'Vestigios diversos · Romano',
     meridiana: '230.6',
@@ -296,6 +298,7 @@ const samplePresets = [
     coords: 'M-230.6 P-013.3',
   },
   {
+    source: 'book',
     title: 'Alfanxia',
     subtitle: 'Vestigios diversos · Romano',
     meridiana: '231.8',
@@ -303,6 +306,7 @@ const samplePresets = [
     coords: 'M-231.8 P-011.2',
   },
   {
+    source: 'book',
     title: 'Paraiso',
     subtitle: 'Achado · Medieval',
     meridiana: '224.1',
@@ -310,24 +314,27 @@ const samplePresets = [
     coords: 'M-224.1 P-010.9',
   },
   {
+    source: 'gauss',
     title: 'Leziria',
     subtitle: 'OPHIUSSA 1996 · Castro Marim',
-    meridiana: '238.4',
-    perpendicular: '19.6',
+    x: '638.4',
+    y: '4119.6',
     coords: 'X 638.4; Y 4119.6',
   },
   {
+    source: 'gauss',
     title: 'Quinta do Muro',
     subtitle: 'OPHIUSSA 1996 · Cacela',
-    meridiana: '228.8',
-    perpendicular: '13.6',
+    x: '628.8',
+    y: '4113.6',
     coords: 'X 628.8; Y 4113.6',
   },
   {
+    source: 'gauss',
     title: 'Cacela',
     subtitle: 'OPHIUSSA 1996 · Cacela',
-    meridiana: '229.2',
-    perpendicular: '13.5',
+    x: '629.2',
+    y: '4113.5',
     coords: 'X 629.2; Y 4113.5',
   },
 ]
@@ -347,8 +354,8 @@ function applyResult(result) {
   form.tm06.northing = formatMeters(result.tm06.northing)
   form.book.meridiana = formatBookShort(result.book.meridiana)
   form.book.perpendicular = formatBookShort(result.book.perpendicular)
-  form.gauss.x = formatGaussShort(result.book.meridiana, 'x')
-  form.gauss.y = formatGaussShort(result.book.perpendicular, 'y')
+  form.gauss.x = formatGaussShort(result.gauss.x)
+  form.gauss.y = formatGaussShort(result.gauss.y)
 
   summaryState.wgs84 = `${formatLatLon(result.wgs84.latitude)}, ${formatLatLon(result.wgs84.longitude)}`
   summaryState.tm06 = `${formatMeters(result.tm06.easting)}, ${formatMeters(result.tm06.northing)}`
@@ -391,6 +398,13 @@ function updateFromMapClick(point) {
 }
 
 function applyPreset(preset) {
+  if (preset.source === 'gauss') {
+    form.gauss.x = preset.x
+    form.gauss.y = preset.y
+    convertFrom('gauss')
+    return
+  }
+
   form.book.meridiana = preset.meridiana
   form.book.perpendicular = preset.perpendicular
   convertFrom('book')
@@ -405,7 +419,7 @@ async function copyGroup(group) {
     } else if (group === 'tm06') {
       text = `${form.tm06.easting}, ${form.tm06.northing}`
     } else if (group === 'gauss') {
-      text = formatGaussText(form.book.meridiana, form.book.perpendicular)
+      text = formatGaussText(form.gauss.x, form.gauss.y)
     } else {
       text = formatBookText(form.book.meridiana, form.book.perpendicular)
     }

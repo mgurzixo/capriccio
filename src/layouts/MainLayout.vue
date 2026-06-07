@@ -68,7 +68,9 @@
             notes and field references.<br />
             <strong>Gauss X / Y</strong> is the military-map notation found in archaeological
             material such as the 1996 OPHIUSSA article and related references that cite Portuguese
-            military maps at <strong>1:25 000</strong>.
+            military maps at <strong>1:25 000</strong>. In the source it is described as "Gauss",
+            but the published numeric pairs used in this app match the kilometre form of a
+            <strong>UTM zone 29 ED50-style</strong> military-map grid.
           </p>
 
           <p>
@@ -100,42 +102,49 @@
             <strong>M-230.5 P-013.6</strong>. In practice this is a shorthand way of writing
             positions on an older projected grid rather than a modern EPSG-labelled format.<br />
             <strong>2. Gauss X / Y</strong><br />
-            This is the notation found in archaeological references tied to the Portuguese military
-            maps, including the 1996 OPHIUSSA paper discussed during the preparation of this app. In
-            those references the pair is written as
-            <strong>X</strong> and <strong>Y</strong>, for example
-            <strong>X 638.4; Y 4119.6</strong>.<br />
+            This is the notation found in archaeological references tied to the Portuguese military maps, including the
+            1996 OPHIUSSA paper discussed during the preparation of this app. In those references the pair is written as
+            <strong>X</strong> and <strong>Y</strong>, for example <strong>X 638.4; Y 4119.6</strong>.<br />
+            <strong>Historical caution about the military maps</strong><br />
+            The Portuguese military map series at <strong>1:25 000</strong> is historical and long-lived, so it should
+            not be treated as a single CRS for all editions. Different sheets and periods may reflect different
+            geodetic frameworks. The interpretation implemented in Capriccio is therefore specific to the published
+            OPHIUSSA-style examples used here, not a blanket claim about every Carta Militar sheet ever printed.<br />
             <strong>Underlying technical system</strong><br />
-            Both notations are treated here as two ways of writing the same older
-            <strong>Hayford-Gauss / Datum Lisboa</strong> projected grid. That grid is implemented
-            in the app with a <strong>Transverse Mercator</strong> definition in
-            <strong>proj4</strong> using an <strong>ESRI:102164-style</strong> parameter set. It is
-            not presented as a separate user card because the user-facing need is to decode the
-            published archaeological notations, not to expose another technical CRS identifier.<br />
+            The two legacy notations are not the same grid written two different ways. The
+            <strong>Carta Arqueológica de Portugal M / P</strong> notation is handled as an older
+            <strong>Hayford-Gauss / Datum Lisboa</strong> projected grid, implemented in the app with a
+            <strong>Transverse Mercator</strong> definition in <strong>proj4</strong> using an
+            <strong>ESRI:102164-style</strong> parameter set. The OPHIUSSA
+            <strong>Gauss X / Y</strong> values, however, match the kilometre notation of a
+            <strong>UTM zone 29 ED50-style</strong> military-map grid.<br />
+            <strong>Why the app still says "Gauss X / Y"</strong><br />
+            The label is preserved because that is the wording used by the archaeological source. To avoid hiding that
+            provenance from the user, the card keeps the source naming, but the Help makes clear that the numeric values
+            behave like UTM zone 29 ED50-style military-map coordinates rather than a simple offset form of the
+            Carta Arqueológica de Portugal shorthand.<br />
             <strong>Difference between M / P and X / Y</strong><br />
-            The difference is the notation, not the base map projection. The
-            <strong>Carta Arqueológica de Portugal</strong> shorthand uses <strong>M / P</strong>,
-            while the military-map archaeological references use <strong>X / Y</strong>. In this app
-            the relation is handled as a fixed shift in kilometre notation:
-            <strong>M = X - 400</strong> and <strong>P = Y - 4100</strong>. That means
-            <strong>Gauss X / Y</strong> and
-            <strong>Carta Arqueológica de Portugal M / P</strong> describe the same underlying grid
-            location, but with different labels and offsets.<br />
+            The difference is therefore not only the labels. The
+            <strong>Carta Arqueológica de Portugal</strong> shorthand uses <strong>M / P</strong> on the old
+            Hayford-Gauss / Datum Lisboa grid, while the OPHIUSSA military-map values use
+            <strong>X / Y</strong> in kilometre notation on a <strong>UTM zone 29 ED50-style</strong> grid.<br />
             <strong>Conversion path used by Capriccio</strong><br />
-            <strong
-              >M / P or X / Y ⇄ Hayford-Gauss / Datum Lisboa ⇄ WGS84 / EPSG:4326 ⇄ ETRS89 / Portugal
-              TM06 / EPSG:3763</strong
-            >.<br />
-            This means the app first normalizes the legacy archaeological notation, then converts
-            through the older Hayford-Gauss / Datum Lisboa grid, then derives WGS84 and TM06 outputs
-            from that result.
+            <strong>Carta Arqueológica de Portugal M / P ⇄ Hayford-Gauss / Datum Lisboa ⇄ WGS84 / EPSG:4326 ⇄ ETRS89 /
+              Portugal TM06 / EPSG:3763</strong><br />
+            <strong>Gauss X / Y ⇄ UTM zone 29 ED50-style military-map grid ⇄ WGS84 / EPSG:4326 ⇄ ETRS89 / Portugal TM06
+              / EPSG:3763</strong><br />
+            This means Capriccio now decodes the two archaeological legacy formats through two different historical
+            projected systems before deriving the modern latitude/longitude and TM06 outputs. If a specific paper map
+            sheet legend states a different datum or projection, that sheet legend should be treated as authoritative.
           </p>
-
-          <p><strong>Version:</strong> {{ appVersion }}</p>
 
           <p><strong>Copyright:</strong> Michel Gouget 2026, gurzixo HAT platinn DOTT com.</p>
 
           <p><strong>License:</strong> MIT.</p>
+
+          <p>
+            <strong>Version:</strong> {{ appVersion }}.
+          </p>
 
           <p>
             <strong>Repository:</strong>

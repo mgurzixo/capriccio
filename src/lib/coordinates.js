@@ -3,8 +3,7 @@ import proj4 from 'proj4'
 const EPSG4326 = 'EPSG:4326'
 const EPSG3763 = 'EPSG:3763'
 const HAYFORD_GAUSS = 'ESRI:102164'
-const GAUSS_X_OFFSET = 400
-const GAUSS_Y_OFFSET = 4100
+const UTM29_ED50 = 'UTM29:ED50'
 
 proj4.defs(
   EPSG3763,
@@ -14,6 +13,11 @@ proj4.defs(
 proj4.defs(
   HAYFORD_GAUSS,
   '+proj=tmerc +lat_0=39.6666666666667 +lon_0=-8.13190611111111 +k=1 +x_0=200000 +y_0=300000 +ellps=intl +towgs84=-288.885,-91.744,126.244,-1.691,0.41,-0.211,-4.598 +units=m +no_defs +type=crs',
+)
+
+proj4.defs(
+  UTM29_ED50,
+  '+proj=utm +zone=29 +ellps=intl +towgs84=-87,-98,-121 +units=m +no_defs +type=crs',
 )
 
 function parseNumber(value, label) {
@@ -62,6 +66,7 @@ export function from4326(latitudeValue, longitudeValue) {
 
   const [tm06Easting, tm06Northing] = proj4(EPSG4326, EPSG3763, [longitude, latitude])
   const [bookMeridiana, bookPerpendicular] = proj4(EPSG4326, HAYFORD_GAUSS, [longitude, latitude])
+  const [gaussX, gaussY] = proj4(EPSG4326, UTM29_ED50, [longitude, latitude])
 
   return {
     wgs84: {
@@ -75,6 +80,10 @@ export function from4326(latitudeValue, longitudeValue) {
     book: {
       meridiana: bookMeridiana,
       perpendicular: bookPerpendicular,
+    },
+    gauss: {
+      x: gaussX,
+      y: gaussY,
     },
     mapPoint: {
       latitude,
@@ -102,8 +111,9 @@ export function fromBookCoordinates(meridianaValue, perpendicularValue) {
 export function fromGaussCoordinates(xValue, yValue) {
   const x = toGaussKilometers(xValue, 'Gauss X')
   const y = toGaussKilometers(yValue, 'Gauss Y')
+  const [longitude, latitude] = proj4(UTM29_ED50, EPSG4326, [x * 1000, y * 1000])
 
-  return fromBookCoordinates(x - GAUSS_X_OFFSET, y - GAUSS_Y_OFFSET)
+  return from4326(latitude, longitude)
 }
 
 export function formatLatLon(value) {
@@ -122,13 +132,12 @@ export function formatBookLabel(meridiana, perpendicular) {
   return `M-${formatBookShort(meridiana)} P-${formatBookShort(perpendicular)}`
 }
 
-export function formatGaussShort(value, axis) {
-  const offset = axis === 'x' ? GAUSS_X_OFFSET : GAUSS_Y_OFFSET
-  return (value / 1000 + offset).toFixed(1)
+export function formatGaussShort(value) {
+  return (value / 1000).toFixed(1)
 }
 
 export function formatGaussLabel(meridiana, perpendicular) {
-  return `X ${formatGaussShort(meridiana, 'x')}; Y ${formatGaussShort(perpendicular, 'y')}`
+  return `X ${formatGaussShort(meridiana)}; Y ${formatGaussShort(perpendicular)}`
 }
 
 export function parseCoordinateText(text) {
@@ -160,7 +169,7 @@ export function formatBookText(meridianaValue, perpendicularValue) {
 }
 
 export function formatGaussText(meridianaValue, perpendicularValue) {
-  const meridiana = toBookMeters(meridianaValue, 'Book M')
-  const perpendicular = toBookMeters(perpendicularValue, 'Book P')
-  return formatGaussLabel(meridiana, perpendicular)
+  const x = toGaussKilometers(meridianaValue, 'Gauss X') * 1000
+  const y = toGaussKilometers(perpendicularValue, 'Gauss Y') * 1000
+  return formatGaussLabel(x, y)
 }
