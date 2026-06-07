@@ -2,51 +2,25 @@
   <div class="map-card">
     <div ref="mapElement" class="map-canvas" />
     <div v-if="zoomReady" class="map-control-stack">
-      <button
-        type="button"
-        class="map-site-toggle"
-        :aria-pressed="props.showSites === true"
+      <button type="button" class="map-site-toggle" :aria-pressed="props.showSites === true"
         :aria-label="props.showSites ? 'Hide archaeological sites' : 'Show archaeological sites'"
         :title="props.showSites ? 'Hide archaeological sites' : 'Show archaeological sites'"
-        @click.stop.prevent="emit('toggle-sites')"
-      >
+        @click.stop.prevent="emit('toggle-sites')">
         <span class="map-site-toggle__icon" aria-hidden="true">🏛</span>
       </button>
 
-      <div
-        class="map-zoom-slider"
-        @pointerdown.stop.prevent
-        @click.stop.prevent
-        @dblclick.stop.prevent
-        @wheel.stop.prevent
-      >
-        <button
-          type="button"
-          class="map-zoom-slider__label"
-          aria-label="Zoom in"
-          @click.stop.prevent="zoomIn"
-        >
+      <div class="map-zoom-slider" @pointerdown.stop.prevent @click.stop.prevent @dblclick.stop.prevent
+        @wheel.stop.prevent>
+        <button type="button" class="map-zoom-slider__label" aria-label="Zoom in" @click.stop.prevent="zoomIn">
           +
         </button>
-        <div
-          ref="zoomTrackWrap"
-          class="map-zoom-slider__track-wrap"
-          @pointerdown.stop.prevent="handleTrackPointerDown"
-        >
+        <div ref="zoomTrackWrap" class="map-zoom-slider__track-wrap" @pointerdown.stop.prevent="handleTrackPointerDown">
           <div class="map-zoom-slider__track" />
           <div class="map-zoom-slider__fill" :style="zoomFillStyle" />
-          <div
-            class="map-zoom-slider__thumb"
-            :style="zoomThumbStyle"
-            @pointerdown.stop.prevent="handleThumbPointerDown"
-          />
+          <div class="map-zoom-slider__thumb" :style="zoomThumbStyle"
+            @pointerdown.stop.prevent="handleThumbPointerDown" />
         </div>
-        <button
-          type="button"
-          class="map-zoom-slider__label"
-          aria-label="Zoom out"
-          @click.stop.prevent="zoomOut"
-        >
+        <button type="button" class="map-zoom-slider__label" aria-label="Zoom out" @click.stop.prevent="zoomOut">
           -
         </button>
       </div>
@@ -55,8 +29,8 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import L from 'leaflet'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import L from 'leaflet';
 
 const props = defineProps({
   point: {
@@ -75,27 +49,27 @@ const props = defineProps({
     type: String,
     default: null,
   },
-})
+});
 
-const emit = defineEmits(['map-click', 'site-select', 'site-copy', 'toggle-sites'])
+const emit = defineEmits(['map-click', 'site-select', 'site-copy', 'toggle-sites']);
 
-const mapElement = ref(null)
-const zoomTrackWrap = ref(null)
-const zoomLevel = ref(6)
+const mapElement = ref(null);
+const zoomTrackWrap = ref(null);
+const zoomLevel = ref(6);
 
-const minZoom = 3
-const maxZoom = 19
-const sliderSteps = 1000
-const zoomReady = ref(false)
-const thumbSize = 18
+const minZoom = 3;
+const maxZoom = 19;
+const sliderSteps = 1000;
+const zoomReady = ref(false);
+const thumbSize = 18;
 
-let mapInstance
-let tileLayer
-let pointLayer
-let siteLayer
-let isZoomDragging = false
-let zoomDragOffsetY = 0
-const siteMarkersById = new Map()
+let mapInstance;
+let tileLayer;
+let pointLayer;
+let siteLayer;
+let isZoomDragging = false;
+let zoomDragOffsetY = 0;
+const siteMarkersById = new Map();
 
 const defaultSiteMarkerStyle = {
   radius: 7,
@@ -103,7 +77,7 @@ const defaultSiteMarkerStyle = {
   color: '#15334a',
   fillColor: '#d7a441',
   fillOpacity: 0.9,
-}
+};
 
 const selectedSiteMarkerStyle = {
   radius: 9,
@@ -111,74 +85,74 @@ const selectedSiteMarkerStyle = {
   color: '#15334a',
   fillColor: '#3f8a83',
   fillOpacity: 0.95,
-}
+};
 
 function setMapInteractionsEnabled(enabled) {
   if (!mapInstance) {
-    return
+    return;
   }
 
-  const action = enabled ? 'enable' : 'disable'
+  const action = enabled ? 'enable' : 'disable';
 
-  mapInstance.dragging[action]()
-  mapInstance.touchZoom[action]()
-  mapInstance.doubleClickZoom[action]()
-  mapInstance.boxZoom[action]()
-  mapInstance.keyboard[action]()
+  mapInstance.dragging[action]();
+  mapInstance.touchZoom[action]();
+  mapInstance.doubleClickZoom[action]();
+  mapInstance.boxZoom[action]();
+  mapInstance.keyboard[action]();
 }
 
 function stopEventPropagation(event) {
-  event.preventDefault()
-  event.stopPropagation()
+  event.preventDefault();
+  event.stopPropagation();
 }
 
 function isTypingTarget(target) {
   if (!(target instanceof HTMLElement)) {
-    return false
+    return false;
   }
 
-  return target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
+  return target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
 }
 
 function handleWindowKeydown(event) {
   if (!mapInstance || isTypingTarget(event.target)) {
-    return
+    return;
   }
 
   if (event.key === '+' || event.key === '=') {
-    event.preventDefault()
-    zoomIn()
-    return
+    event.preventDefault();
+    zoomIn();
+    return;
   }
 
   if (event.key === '-' || event.key === '_') {
-    event.preventDefault()
-    zoomOut()
+    event.preventDefault();
+    zoomOut();
   }
 }
 
 const zoomRatio = computed(() => {
   if (sliderSteps <= 0) {
-    return 0
+    return 0;
   }
 
-  return Number(zoomLevel.value) / sliderSteps
-})
+  return Number(zoomLevel.value) / sliderSteps;
+});
 
 const zoomThumbStyle = computed(() => ({
   bottom: `calc(${zoomRatio.value * 100}% - ${thumbSize / 2}px)`,
-}))
+}));
 
 const zoomFillStyle = computed(() => ({
   height: `${zoomRatio.value * 100}%`,
-}))
+}));
 
 function updatePoint(point) {
   if (!mapInstance || !point) {
-    return
+    return;
   }
 
-  const latLng = [point.latitude, point.longitude]
+  const latLng = [point.latitude, point.longitude];
 
   if (!pointLayer) {
     pointLayer = L.circleMarker(latLng, {
@@ -187,282 +161,282 @@ function updatePoint(point) {
       color: '#15334a',
       fillColor: '#e6492d',
       fillOpacity: 0.95,
-    }).addTo(mapInstance)
+    }).addTo(mapInstance);
   } else {
-    pointLayer.setLatLng(latLng)
+    pointLayer.setLatLng(latLng);
   }
 
-  pointLayer.bindTooltip(point.label, { direction: 'top' })
-  mapInstance.panTo(latLng, { animate: true })
+  pointLayer.bindTooltip(point.label, { direction: 'top' });
+  mapInstance.panTo(latLng, { animate: true });
 }
 
 function getSiteCoordinateLabel(site) {
-  return `${site.latitude.toFixed(6)}, ${site.longitude.toFixed(6)}`
+  return `${site.latitude.toFixed(6)}, ${site.longitude.toFixed(6)}`;
 }
 
 function getSiteLocationLabel(site) {
-  return [site.parish, site.municipality].filter(Boolean).join(' · ')
+  return [site.parish, site.municipality].filter(Boolean).join(' · ');
 }
 
 function buildSitePopupContent(site) {
-  const container = document.createElement('div')
-  container.className = 'map-site-popup'
+  const container = document.createElement('div');
+  container.className = 'map-site-popup';
 
-  const title = document.createElement('div')
-  title.className = 'map-site-popup__title'
-  title.textContent = site.name
-  container.appendChild(title)
+  const title = document.createElement('div');
+  title.className = 'map-site-popup__title';
+  title.textContent = site.name;
+  container.appendChild(title);
 
-  const location = getSiteLocationLabel(site)
+  const location = getSiteLocationLabel(site);
 
   if (location) {
-    const locationNode = document.createElement('div')
-    locationNode.className = 'map-site-popup__location'
-    locationNode.textContent = location
-    container.appendChild(locationNode)
+    const locationNode = document.createElement('div');
+    locationNode.className = 'map-site-popup__location';
+    locationNode.textContent = location;
+    container.appendChild(locationNode);
   }
 
-  const coordinates = document.createElement('div')
-  coordinates.className = 'map-site-popup__coords'
-  coordinates.textContent = getSiteCoordinateLabel(site)
-  container.appendChild(coordinates)
+  const coordinates = document.createElement('div');
+  coordinates.className = 'map-site-popup__coords';
+  coordinates.textContent = getSiteCoordinateLabel(site);
+  container.appendChild(coordinates);
 
-  const copyButton = document.createElement('button')
-  copyButton.type = 'button'
-  copyButton.className = 'map-site-popup__copy'
-  copyButton.textContent = 'Copy coordinates'
+  const copyButton = document.createElement('button');
+  copyButton.type = 'button';
+  copyButton.className = 'map-site-popup__copy';
+  copyButton.textContent = 'Copy coordinates';
   copyButton.addEventListener('click', (event) => {
-    stopEventPropagation(event)
-    emit('site-copy', site)
-  })
-  container.appendChild(copyButton)
+    stopEventPropagation(event);
+    emit('site-copy', site);
+  });
+  container.appendChild(copyButton);
 
-  return container
+  return container;
 }
 
 function applySelectedSiteMarkerStyle() {
   siteMarkersById.forEach((marker, markerId) => {
-    marker.setStyle(markerId === props.selectedSiteId ? selectedSiteMarkerStyle : defaultSiteMarkerStyle)
-  })
+    marker.setStyle(markerId === props.selectedSiteId ? selectedSiteMarkerStyle : defaultSiteMarkerStyle);
+  });
 }
 
 function focusSelectedSite(openPopup = false) {
   if (!mapInstance || props.showSites !== true || !props.selectedSiteId) {
-    return
+    return;
   }
 
-  const marker = siteMarkersById.get(props.selectedSiteId)
+  const marker = siteMarkersById.get(props.selectedSiteId);
 
   if (!marker) {
-    return
+    return;
   }
 
-  marker.bringToFront()
-  mapInstance.panTo(marker.getLatLng(), { animate: true })
+  marker.bringToFront();
+  mapInstance.panTo(marker.getLatLng(), { animate: true });
 
   if (openPopup) {
-    marker.openPopup()
+    marker.openPopup();
   }
 }
 
 function updateSites() {
   if (!mapInstance) {
-    return
+    return;
   }
 
   if (!siteLayer) {
-    siteLayer = L.layerGroup()
+    siteLayer = L.layerGroup();
   }
 
-  siteLayer.clearLayers()
-  siteMarkersById.clear()
+  siteLayer.clearLayers();
+  siteMarkersById.clear();
 
   if (mapInstance.hasLayer(siteLayer)) {
-    mapInstance.removeLayer(siteLayer)
+    mapInstance.removeLayer(siteLayer);
   }
 
   if (props.showSites !== true) {
-    return
+    return;
   }
 
   props.sites.forEach((site) => {
     const marker = L.circleMarker(
       [site.latitude, site.longitude],
       site.id === props.selectedSiteId ? selectedSiteMarkerStyle : defaultSiteMarkerStyle,
-    )
+    );
 
     marker.bindPopup(buildSitePopupContent(site), {
       autoPan: true,
       closeButton: true,
-    })
+    });
     marker.on('click', () => {
-      emit('site-select', site)
-    })
-    marker.addTo(siteLayer)
-    siteMarkersById.set(site.id, marker)
-  })
+      emit('site-select', site);
+    });
+    marker.addTo(siteLayer);
+    siteMarkersById.set(site.id, marker);
+  });
 
-  siteLayer.addTo(mapInstance)
-  applySelectedSiteMarkerStyle()
-  focusSelectedSite(true)
+  siteLayer.addTo(mapInstance);
+  applySelectedSiteMarkerStyle();
+  focusSelectedSite(true);
 }
 
 function syncZoomLevel() {
   if (!mapInstance) {
-    return
+    return;
   }
 
-  const range = maxZoom - minZoom
+  const range = maxZoom - minZoom;
 
   if (range <= 0) {
-    zoomLevel.value = 0
-    return
+    zoomLevel.value = 0;
+    return;
   }
 
-  const ratio = (mapInstance.getZoom() - minZoom) / range
-  zoomLevel.value = Math.min(sliderSteps, Math.max(0, ratio * sliderSteps))
+  const ratio = (mapInstance.getZoom() - minZoom) / range;
+  zoomLevel.value = Math.min(sliderSteps, Math.max(0, ratio * sliderSteps));
 }
 
 function setZoom(nextZoom, options = {}) {
   if (!mapInstance) {
-    return
+    return;
   }
 
-  const clampedZoom = Math.min(maxZoom, Math.max(minZoom, nextZoom))
-  mapInstance.setZoom(clampedZoom, options)
+  const clampedZoom = Math.min(maxZoom, Math.max(minZoom, nextZoom));
+  mapInstance.setZoom(clampedZoom, options);
 }
 
 function getClampedIntegerZoom(direction) {
   if (!mapInstance) {
-    return minZoom
+    return minZoom;
   }
 
-  const currentZoom = mapInstance.getZoom()
-  const nearestIntegerZoom = Math.round(currentZoom)
-  const isIntegerZoom = Math.abs(currentZoom - nearestIntegerZoom) < 0.000001
+  const currentZoom = mapInstance.getZoom();
+  const nearestIntegerZoom = Math.round(currentZoom);
+  const isIntegerZoom = Math.abs(currentZoom - nearestIntegerZoom) < 0.000001;
 
-  let nextZoom
+  let nextZoom;
 
   if (direction > 0) {
-    nextZoom = isIntegerZoom ? nearestIntegerZoom + 1 : Math.ceil(currentZoom)
+    nextZoom = isIntegerZoom ? nearestIntegerZoom + 1 : Math.ceil(currentZoom);
   } else {
-    nextZoom = isIntegerZoom ? nearestIntegerZoom - 1 : Math.floor(currentZoom)
+    nextZoom = isIntegerZoom ? nearestIntegerZoom - 1 : Math.floor(currentZoom);
   }
 
-  return Math.min(maxZoom, Math.max(minZoom, nextZoom))
+  return Math.min(maxZoom, Math.max(minZoom, nextZoom));
 }
 
 function zoomIn() {
   if (!mapInstance) {
-    return
+    return;
   }
 
-  const targetZoom = getClampedIntegerZoom(1)
+  const targetZoom = getClampedIntegerZoom(1);
 
   if (targetZoom === mapInstance.getZoom()) {
-    return
+    return;
   }
 
-  mapInstance.stop()
-  setZoom(targetZoom)
+  mapInstance.stop();
+  setZoom(targetZoom);
 }
 
 function zoomOut() {
   if (!mapInstance) {
-    return
+    return;
   }
 
-  const targetZoom = getClampedIntegerZoom(-1)
+  const targetZoom = getClampedIntegerZoom(-1);
 
   if (targetZoom === mapInstance.getZoom()) {
-    return
+    return;
   }
 
-  mapInstance.stop()
-  setZoom(targetZoom)
+  mapInstance.stop();
+  setZoom(targetZoom);
 }
 
 function updateZoomFromPointer(clientY) {
-  const trackBounds = zoomTrackWrap.value?.getBoundingClientRect()
+  const trackBounds = zoomTrackWrap.value?.getBoundingClientRect();
 
   if (!trackBounds) {
-    return
+    return;
   }
 
-  const effectiveClientY = clientY - zoomDragOffsetY
-  const offsetFromBottom = trackBounds.bottom - effectiveClientY
-  const ratio = Math.min(1, Math.max(0, offsetFromBottom / trackBounds.height))
-  const sliderValue = ratio * sliderSteps
-  const nextZoom = minZoom + (sliderValue / sliderSteps) * (maxZoom - minZoom)
+  const effectiveClientY = clientY - zoomDragOffsetY;
+  const offsetFromBottom = trackBounds.bottom - effectiveClientY;
+  const ratio = Math.min(1, Math.max(0, offsetFromBottom / trackBounds.height));
+  const sliderValue = ratio * sliderSteps;
+  const nextZoom = minZoom + (sliderValue / sliderSteps) * (maxZoom - minZoom);
 
-  setZoom(nextZoom, { animate: true })
+  setZoom(nextZoom, { animate: true });
 }
 
 function handleZoomPointerMove(event) {
   if (!isZoomDragging) {
-    return
+    return;
   }
 
-  stopEventPropagation(event)
-  updateZoomFromPointer(event.clientY)
+  stopEventPropagation(event);
+  updateZoomFromPointer(event.clientY);
 }
 
 function stopZoomDrag(event) {
   if (event) {
-    stopEventPropagation(event)
+    stopEventPropagation(event);
   }
 
-  isZoomDragging = false
-  zoomDragOffsetY = 0
-  setMapInteractionsEnabled(true)
+  isZoomDragging = false;
+  zoomDragOffsetY = 0;
+  setMapInteractionsEnabled(true);
 
   if (zoomTrackWrap.value && event?.pointerId !== undefined) {
-    zoomTrackWrap.value.releasePointerCapture(event.pointerId)
+    zoomTrackWrap.value.releasePointerCapture(event.pointerId);
   }
 
-  window.removeEventListener('pointermove', handleZoomPointerMove)
-  window.removeEventListener('pointerup', stopZoomDrag)
-  window.removeEventListener('pointercancel', stopZoomDrag)
+  window.removeEventListener('pointermove', handleZoomPointerMove);
+  window.removeEventListener('pointerup', stopZoomDrag);
+  window.removeEventListener('pointercancel', stopZoomDrag);
 }
 
 function startZoomDrag(event, dragOffsetY = 0) {
-  isZoomDragging = true
-  zoomDragOffsetY = dragOffsetY
-  setMapInteractionsEnabled(false)
+  isZoomDragging = true;
+  zoomDragOffsetY = dragOffsetY;
+  setMapInteractionsEnabled(false);
 
   if (zoomTrackWrap.value && event.pointerId !== undefined) {
-    zoomTrackWrap.value.setPointerCapture(event.pointerId)
+    zoomTrackWrap.value.setPointerCapture(event.pointerId);
   }
 
-  window.addEventListener('pointermove', handleZoomPointerMove)
-  window.addEventListener('pointerup', stopZoomDrag)
-  window.addEventListener('pointercancel', stopZoomDrag)
+  window.addEventListener('pointermove', handleZoomPointerMove);
+  window.addEventListener('pointerup', stopZoomDrag);
+  window.addEventListener('pointercancel', stopZoomDrag);
 }
 
 function handleTrackPointerDown(event) {
   if (event.button !== 0) {
-    return
+    return;
   }
 
-  stopEventPropagation(event)
-  startZoomDrag(event, 0)
-  updateZoomFromPointer(event.clientY)
+  stopEventPropagation(event);
+  startZoomDrag(event, 0);
+  updateZoomFromPointer(event.clientY);
 }
 
 function handleThumbPointerDown(event) {
   if (event.button !== 0) {
-    return
+    return;
   }
 
-  stopEventPropagation(event)
-  const trackBounds = zoomTrackWrap.value?.getBoundingClientRect()
+  stopEventPropagation(event);
+  const trackBounds = zoomTrackWrap.value?.getBoundingClientRect();
 
   if (!trackBounds) {
-    return
+    return;
   }
 
-  const thumbCenterY = trackBounds.bottom - zoomRatio.value * trackBounds.height
-  startZoomDrag(event, event.clientY - thumbCenterY)
+  const thumbCenterY = trackBounds.bottom - zoomRatio.value * trackBounds.height;
+  startZoomDrag(event, event.clientY - thumbCenterY);
 }
 
 onMounted(() => {
@@ -472,7 +446,7 @@ onMounted(() => {
     maxZoom,
     zoomSnap: 0,
     zoomDelta: 1,
-  }).setView([39.5, -8.0], 6)
+  }).setView([39.5, -8.0], 6);
 
   L.control
     .scale({
@@ -480,67 +454,67 @@ onMounted(() => {
       metric: true,
       imperial: false,
     })
-    .addTo(mapInstance)
+    .addTo(mapInstance);
 
   tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  })
+  });
 
-  tileLayer.addTo(mapInstance)
+  tileLayer.addTo(mapInstance);
   mapInstance.on('click', (event) => {
     emit('map-click', {
       latitude: event.latlng.lat,
       longitude: event.latlng.lng,
-    })
-  })
-  mapInstance.on('zoomend', syncZoomLevel)
-  window.addEventListener('keydown', handleWindowKeydown)
-  mapElement.value.title = 'Click the map to set the current coordinates'
-  updatePoint(props.point)
-  updateSites()
-  syncZoomLevel()
-  zoomReady.value = true
-})
+    });
+  });
+  mapInstance.on('zoomend', syncZoomLevel);
+  window.addEventListener('keydown', handleWindowKeydown);
+  mapElement.value.title = 'Click the map to set the current coordinates';
+  updatePoint(props.point);
+  updateSites();
+  syncZoomLevel();
+  zoomReady.value = true;
+});
 
 watch(
   () => props.point,
   (point) => {
-    updatePoint(point)
+    updatePoint(point);
   },
   { deep: true },
-)
+);
 
 watch(
   () => [props.showSites, props.sites],
   () => {
-    updateSites()
+    updateSites();
   },
   { deep: true },
-)
+);
 
 watch(
   () => props.selectedSiteId,
   (selectedSiteId) => {
-    applySelectedSiteMarkerStyle()
+    applySelectedSiteMarkerStyle();
 
     if (selectedSiteId) {
-      focusSelectedSite(true)
+      focusSelectedSite(true);
     }
   },
-)
+);
 
 onBeforeUnmount(() => {
-  stopZoomDrag()
+  stopZoomDrag();
 
   if (mapInstance) {
-    mapInstance.off('zoomend', syncZoomLevel)
-    mapInstance.remove()
+    mapInstance.off('zoomend', syncZoomLevel);
+    mapInstance.remove();
   }
 
-  window.removeEventListener('keydown', handleWindowKeydown)
-})
+  window.removeEventListener('keydown', handleWindowKeydown);
+});
 </script>
 
 <style scoped>

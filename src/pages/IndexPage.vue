@@ -8,26 +8,12 @@
               <div class="system-header-row">
                 <div class="system-title">EPSG:4326</div>
                 <div class="system-actions">
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_paste"
-                    aria-label="Paste EPSG:4326"
-                    @click="pasteGroup('wgs84')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_paste" aria-label="Paste EPSG:4326"
+                    @click="pasteGroup('wgs84')">
                     <q-tooltip>Paste latitude and longitude from the clipboard</q-tooltip>
                   </q-btn>
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_copy"
-                    aria-label="Copy EPSG:4326"
-                    @click="copyGroup('wgs84')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_copy" aria-label="Copy EPSG:4326"
+                    @click="copyGroup('wgs84')">
                     <q-tooltip>Copy latitude and longitude to the clipboard</q-tooltip>
                   </q-btn>
                 </div>
@@ -58,26 +44,12 @@
               <div class="system-header-row">
                 <div class="system-title">EPSG:3763</div>
                 <div class="system-actions">
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_paste"
-                    aria-label="Paste EPSG:3763"
-                    @click="pasteGroup('tm06')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_paste" aria-label="Paste EPSG:3763"
+                    @click="pasteGroup('tm06')">
                     <q-tooltip>Paste easting and northing from the clipboard</q-tooltip>
                   </q-btn>
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_copy"
-                    aria-label="Copy EPSG:3763"
-                    @click="copyGroup('tm06')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_copy" aria-label="Copy EPSG:3763"
+                    @click="copyGroup('tm06')">
                     <q-tooltip>Copy easting and northing to the clipboard</q-tooltip>
                   </q-btn>
                 </div>
@@ -108,26 +80,12 @@
               <div class="system-header-row">
                 <div class="system-title">Book M / P</div>
                 <div class="system-actions">
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_paste"
-                    aria-label="Paste book coordinates"
-                    @click="pasteGroup('book')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_paste"
+                    aria-label="Paste book coordinates" @click="pasteGroup('book')">
                     <q-tooltip>Paste book M and P values from the clipboard</q-tooltip>
                   </q-btn>
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_copy"
-                    aria-label="Copy book coordinates"
-                    @click="copyGroup('book')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_copy" aria-label="Copy book coordinates"
+                    @click="copyGroup('book')">
                     <q-tooltip>Copy book M and P values to the clipboard</q-tooltip>
                   </q-btn>
                 </div>
@@ -158,26 +116,12 @@
               <div class="system-header-row">
                 <div class="system-title">Gauss X / Y</div>
                 <div class="system-actions">
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_paste"
-                    aria-label="Paste Gauss X/Y"
-                    @click="pasteGroup('gauss')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_paste" aria-label="Paste Gauss X/Y"
+                    @click="pasteGroup('gauss')">
                     <q-tooltip>Paste Gauss X and Y values from the clipboard</q-tooltip>
                   </q-btn>
-                  <q-btn
-                    flat
-                    round
-                    dense
-                    class="header-icon-btn"
-                    icon="content_copy"
-                    aria-label="Copy Gauss X/Y"
-                    @click="copyGroup('gauss')"
-                  >
+                  <q-btn flat round dense class="header-icon-btn" icon="content_copy" aria-label="Copy Gauss X/Y"
+                    @click="copyGroup('gauss')">
                     <q-tooltip>Copy Gauss X and Y values to the clipboard</q-tooltip>
                   </q-btn>
                 </div>
@@ -204,16 +148,10 @@
       </section>
 
       <section class="map-stack">
-        <LeafletMap
-          :point="mapPoint"
-          :sites="algarveArchaeologicalSites"
-          :show-sites="showArchaeologicalSites"
-          :selected-site-id="selectedArchaeologicalSiteId"
-          @map-click="updateFromMapClick"
-          @site-select="selectArchaeologicalSite"
-          @site-copy="copySiteCoordinates"
-          @toggle-sites="showArchaeologicalSites = !showArchaeologicalSites"
-        />
+        <LeafletMap :point="mapPoint" :sites="algarveArchaeologicalSites" :show-sites="showArchaeologicalSites"
+          :selected-site-id="selectedArchaeologicalSiteId" @map-click="updateFromMapClick"
+          @site-select="selectArchaeologicalSite" @site-copy="copySiteCoordinates"
+          @toggle-sites="showArchaeologicalSites = !showArchaeologicalSites" />
       </section>
     </div>
 
@@ -226,14 +164,8 @@
       </q-card-section>
 
       <q-card-section class="preset-grid">
-        <q-btn
-          v-for="preset in samplePresets"
-          :key="preset.title"
-          outline
-          no-caps
-          class="preset-btn"
-          @click="applyPreset(preset)"
-        >
+        <q-btn v-for="preset in samplePresets" :key="preset.title" outline no-caps class="preset-btn"
+          @click="applyPreset(preset)">
           <div class="preset-btn__title">{{ preset.title }}</div>
           <div class="preset-btn__meta">{{ preset.subtitle }}</div>
           <div class="preset-btn__coords">{{ preset.coords }}</div>
@@ -254,21 +186,16 @@
 
       <q-card-section class="sites-card__summary">
         <div class="system-caption">
-          {{ algarveArchaeologicalSites.length }} deduplicated OSM sites. Use the temple button on the map to show or hide markers, then select one to center the map and update all four coordinate cards.
+          {{ algarveArchaeologicalSites.length }} deduplicated OSM sites. Use the temple button on the map to show or
+          hide markers, then select one to center the map and update all four coordinate cards.
         </div>
       </q-card-section>
 
       <q-card-section class="site-directory-list">
-        <button
-          v-for="site in algarveArchaeologicalSites"
-          :key="site.id"
-          type="button"
-          :class="[
-            'site-directory-item',
-            { 'site-directory-item--active': site.id === selectedArchaeologicalSiteId },
-          ]"
-          @click="selectArchaeologicalSite(site)"
-        >
+        <button v-for="site in algarveArchaeologicalSites" :key="site.id" type="button" :class="[
+          'site-directory-item',
+          { 'site-directory-item--active': site.id === selectedArchaeologicalSiteId },
+        ]" @click="selectArchaeologicalSite(site)">
           <span class="site-directory-item__name">{{ site.name }}</span>
           <span class="site-directory-item__meta">{{ formatSiteLocation(site) }}</span>
           <span class="site-directory-item__coords">{{ formatSiteCoordinateText(site) }}</span>
@@ -282,11 +209,11 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { copyToClipboard, useQuasar } from 'quasar'
-import LeafletMap from 'components/LeafletMap.vue'
-import { algarveArchaeologicalSites } from 'src/data/algarveArchaeologicalSites'
-import { summaryState } from 'src/lib/summaryState'
+import { reactive, ref } from 'vue';
+import { copyToClipboard, useQuasar } from 'quasar';
+import LeafletMap from 'components/LeafletMap.vue';
+import { algarveArchaeologicalSites } from 'src/data/algarveArchaeologicalSites';
+import { summaryState } from 'src/lib/summaryState';
 import {
   formatGaussText,
   formatGaussShort,
@@ -302,9 +229,9 @@ import {
   normalizeBookValue,
   normalizeGaussValue,
   parseCoordinateText,
-} from 'src/lib/coordinates'
+} from 'src/lib/coordinates';
 
-const $q = useQuasar()
+const $q = useQuasar();
 
 const form = reactive({
   wgs84: {
@@ -323,11 +250,11 @@ const form = reactive({
     x: '',
     y: '',
   },
-})
+});
 
-const mapPoint = ref(null)
-const showArchaeologicalSites = ref(false)
-const selectedArchaeologicalSiteId = ref(null)
+const mapPoint = ref(null);
+const showArchaeologicalSites = ref(false);
+const selectedArchaeologicalSiteId = ref(null);
 
 const samplePresets = [
   {
@@ -386,177 +313,177 @@ const samplePresets = [
     y: '4113.5',
     coords: 'X 629.2; Y 4113.5',
   },
-]
+];
 
 function notify(type, message) {
   $q.notify({
     type,
     message,
     position: 'bottom',
-  })
+  });
 }
 
 function applyResult(result) {
-  form.wgs84.latitude = formatLatLon(result.wgs84.latitude)
-  form.wgs84.longitude = formatLatLon(result.wgs84.longitude)
-  form.tm06.easting = formatMeters(result.tm06.easting)
-  form.tm06.northing = formatMeters(result.tm06.northing)
-  form.book.meridiana = formatBookShort(result.book.meridiana)
-  form.book.perpendicular = formatBookShort(result.book.perpendicular)
-  form.gauss.x = formatGaussShort(result.gauss.x)
-  form.gauss.y = formatGaussShort(result.gauss.y)
+  form.wgs84.latitude = formatLatLon(result.wgs84.latitude);
+  form.wgs84.longitude = formatLatLon(result.wgs84.longitude);
+  form.tm06.easting = formatMeters(result.tm06.easting);
+  form.tm06.northing = formatMeters(result.tm06.northing);
+  form.book.meridiana = formatBookShort(result.book.meridiana);
+  form.book.perpendicular = formatBookShort(result.book.perpendicular);
+  form.gauss.x = formatGaussShort(result.gauss.x);
+  form.gauss.y = formatGaussShort(result.gauss.y);
 
-  summaryState.wgs84 = `${formatLatLon(result.wgs84.latitude)}, ${formatLatLon(result.wgs84.longitude)}`
-  summaryState.tm06 = `${formatMeters(result.tm06.easting)}, ${formatMeters(result.tm06.northing)}`
-  summaryState.book = formatBookLabel(result.book.meridiana, result.book.perpendicular)
+  summaryState.wgs84 = `${formatLatLon(result.wgs84.latitude)}, ${formatLatLon(result.wgs84.longitude)}`;
+  summaryState.tm06 = `${formatMeters(result.tm06.easting)}, ${formatMeters(result.tm06.northing)}`;
+  summaryState.book = formatBookLabel(result.book.meridiana, result.book.perpendicular);
 
   mapPoint.value = {
     latitude: result.mapPoint.latitude,
     longitude: result.mapPoint.longitude,
     label: `${formatLatLon(result.mapPoint.latitude)}, ${formatLatLon(result.mapPoint.longitude)}`,
-  }
+  };
 }
 
 function convertFrom(source) {
   try {
-    selectedArchaeologicalSiteId.value = null
-    let result
+    selectedArchaeologicalSiteId.value = null;
+    let result;
 
     if (source === 'wgs84') {
-      result = from4326(form.wgs84.latitude, form.wgs84.longitude)
+      result = from4326(form.wgs84.latitude, form.wgs84.longitude);
     } else if (source === 'tm06') {
-      result = from3763(form.tm06.easting, form.tm06.northing)
+      result = from3763(form.tm06.easting, form.tm06.northing);
     } else if (source === 'gauss') {
-      result = fromGaussCoordinates(form.gauss.x, form.gauss.y)
+      result = fromGaussCoordinates(form.gauss.x, form.gauss.y);
     } else {
-      result = fromBookCoordinates(form.book.meridiana, form.book.perpendicular)
+      result = fromBookCoordinates(form.book.meridiana, form.book.perpendicular);
     }
 
-    applyResult(result)
-    notify('positive', 'Coordinates converted successfully.')
+    applyResult(result);
+    notify('positive', 'Coordinates converted successfully.');
   } catch (error) {
-    notify('negative', error.message)
+    notify('negative', error.message);
   }
 }
 
 function updateFromMapClick(point) {
   try {
-    selectedArchaeologicalSiteId.value = null
-    applyResult(from4326(point.latitude, point.longitude))
+    selectedArchaeologicalSiteId.value = null;
+    applyResult(from4326(point.latitude, point.longitude));
   } catch (error) {
-    notify('negative', error.message)
+    notify('negative', error.message);
   }
 }
 
 function formatSiteLocation(site) {
-  return [site.parish, site.municipality].filter(Boolean).join(' · ')
+  return [site.parish, site.municipality].filter(Boolean).join(' · ');
 }
 
 function formatSiteCoordinateText(site) {
-  return `${site.latitude.toFixed(6)}, ${site.longitude.toFixed(6)}`
+  return `${site.latitude.toFixed(6)}, ${site.longitude.toFixed(6)}`;
 }
 
 function selectArchaeologicalSite(site) {
   try {
-    selectedArchaeologicalSiteId.value = site.id
-    showArchaeologicalSites.value = true
-    applyResult(from4326(site.latitude, site.longitude))
+    selectedArchaeologicalSiteId.value = site.id;
+    showArchaeologicalSites.value = true;
+    applyResult(from4326(site.latitude, site.longitude));
   } catch (error) {
-    notify('negative', error.message)
+    notify('negative', error.message);
   }
 }
 
 async function copySiteCoordinates(site) {
   try {
-    await copyToClipboard(formatSiteCoordinateText(site))
-    notify('positive', 'Site coordinates copied to the clipboard.')
+    await copyToClipboard(formatSiteCoordinateText(site));
+    notify('positive', 'Site coordinates copied to the clipboard.');
   } catch (error) {
-    notify('negative', error.message || 'Unable to copy site coordinates.')
+    notify('negative', error.message || 'Unable to copy site coordinates.');
   }
 }
 
 function applyPreset(preset) {
   if (preset.source === 'gauss') {
-    form.gauss.x = preset.x
-    form.gauss.y = preset.y
-    convertFrom('gauss')
-    return
+    form.gauss.x = preset.x;
+    form.gauss.y = preset.y;
+    convertFrom('gauss');
+    return;
   }
 
-  form.book.meridiana = preset.meridiana
-  form.book.perpendicular = preset.perpendicular
-  convertFrom('book')
+  form.book.meridiana = preset.meridiana;
+  form.book.perpendicular = preset.perpendicular;
+  convertFrom('book');
 }
 
 async function copyGroup(group) {
   try {
-    let text
+    let text;
 
     if (group === 'wgs84') {
-      text = `${form.wgs84.latitude}, ${form.wgs84.longitude}`
+      text = `${form.wgs84.latitude}, ${form.wgs84.longitude}`;
     } else if (group === 'tm06') {
-      text = `${form.tm06.easting}, ${form.tm06.northing}`
+      text = `${form.tm06.easting}, ${form.tm06.northing}`;
     } else if (group === 'gauss') {
-      text = formatGaussText(form.gauss.x, form.gauss.y)
+      text = formatGaussText(form.gauss.x, form.gauss.y);
     } else {
-      text = formatBookText(form.book.meridiana, form.book.perpendicular)
+      text = formatBookText(form.book.meridiana, form.book.perpendicular);
     }
 
-    await copyToClipboard(text)
-    notify('positive', 'Coordinates copied to the clipboard.')
+    await copyToClipboard(text);
+    notify('positive', 'Coordinates copied to the clipboard.');
   } catch (error) {
-    notify('negative', error.message || 'Unable to copy coordinates.')
+    notify('negative', error.message || 'Unable to copy coordinates.');
   }
 }
 
 async function pasteGroup(group) {
   try {
-    const text = await readClipboardText()
-    const [first, second] = parseCoordinateText(text)
+    const text = await readClipboardText();
+    const [first, second] = parseCoordinateText(text);
 
     if (group === 'wgs84') {
-      form.wgs84.latitude = String(first)
-      form.wgs84.longitude = String(second)
+      form.wgs84.latitude = String(first);
+      form.wgs84.longitude = String(second);
     } else if (group === 'tm06') {
-      form.tm06.easting = String(first)
-      form.tm06.northing = String(second)
+      form.tm06.easting = String(first);
+      form.tm06.northing = String(second);
     } else if (group === 'gauss') {
-      form.gauss.x = normalizeGaussValue(first, 'x')
-      form.gauss.y = normalizeGaussValue(second, 'y')
+      form.gauss.x = normalizeGaussValue(first, 'x');
+      form.gauss.y = normalizeGaussValue(second, 'y');
     } else {
-      form.book.meridiana = normalizeBookValue(first)
-      form.book.perpendicular = normalizeBookValue(second)
+      form.book.meridiana = normalizeBookValue(first);
+      form.book.perpendicular = normalizeBookValue(second);
     }
 
-    notify('positive', 'Coordinates pasted from the clipboard.')
+    notify('positive', 'Coordinates pasted from the clipboard.');
   } catch (error) {
-    notify('negative', error.message || 'Unable to read the clipboard.')
+    notify('negative', error.message || 'Unable to read the clipboard.');
   }
 }
 
 async function readClipboardText() {
   if ($q.platform.is.capacitor === true && $q.platform.is.android === true) {
-    const clipboardPlugin = window.Capacitor?.Plugins?.Clipboard
+    const clipboardPlugin = window.Capacitor?.Plugins?.Clipboard;
 
     if (clipboardPlugin?.read) {
-      const clipboardData = await clipboardPlugin.read()
+      const clipboardData = await clipboardPlugin.read();
       const nativeText = [
         clipboardData?.value,
         clipboardData?.string,
         clipboardData?.text,
         clipboardData?.url,
-      ].find((value) => typeof value === 'string' && value.trim().length > 0)
+      ].find((value) => typeof value === 'string' && value.trim().length > 0);
 
       if (nativeText) {
-        return nativeText
+        return nativeText;
       }
     }
   }
 
   if (navigator.clipboard?.readText) {
-    return navigator.clipboard.readText()
+    return navigator.clipboard.readText();
   }
 
-  throw new Error('Clipboard read is not available on this platform.')
+  throw new Error('Clipboard read is not available on this platform.');
 }
 </script>
