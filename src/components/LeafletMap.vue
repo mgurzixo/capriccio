@@ -1,43 +1,55 @@
 <template>
   <div class="map-card">
     <div ref="mapElement" class="map-canvas" />
-    <div
-      v-if="zoomReady"
-      class="map-zoom-slider"
-      @pointerdown.stop.prevent
-      @click.stop.prevent
-      @dblclick.stop.prevent
-      @wheel.stop.prevent
-    >
+    <div v-if="zoomReady" class="map-control-stack">
       <button
         type="button"
-        class="map-zoom-slider__label"
-        aria-label="Zoom in"
-        @click.stop.prevent="zoomIn"
+        class="map-site-toggle"
+        :aria-pressed="props.showSites === true"
+        :aria-label="props.showSites ? 'Hide archaeological sites' : 'Show archaeological sites'"
+        :title="props.showSites ? 'Hide archaeological sites' : 'Show archaeological sites'"
+        @click.stop.prevent="emit('toggle-sites')"
       >
-        +
+        <span class="map-site-toggle__icon" aria-hidden="true">🏛</span>
       </button>
+
       <div
-        ref="zoomTrackWrap"
-        class="map-zoom-slider__track-wrap"
-        @pointerdown.stop.prevent="handleTrackPointerDown"
+        class="map-zoom-slider"
+        @pointerdown.stop.prevent
+        @click.stop.prevent
+        @dblclick.stop.prevent
+        @wheel.stop.prevent
       >
-        <div class="map-zoom-slider__track" />
-        <div class="map-zoom-slider__fill" :style="zoomFillStyle" />
+        <button
+          type="button"
+          class="map-zoom-slider__label"
+          aria-label="Zoom in"
+          @click.stop.prevent="zoomIn"
+        >
+          +
+        </button>
         <div
-          class="map-zoom-slider__thumb"
-          :style="zoomThumbStyle"
-          @pointerdown.stop.prevent="handleThumbPointerDown"
-        />
+          ref="zoomTrackWrap"
+          class="map-zoom-slider__track-wrap"
+          @pointerdown.stop.prevent="handleTrackPointerDown"
+        >
+          <div class="map-zoom-slider__track" />
+          <div class="map-zoom-slider__fill" :style="zoomFillStyle" />
+          <div
+            class="map-zoom-slider__thumb"
+            :style="zoomThumbStyle"
+            @pointerdown.stop.prevent="handleThumbPointerDown"
+          />
+        </div>
+        <button
+          type="button"
+          class="map-zoom-slider__label"
+          aria-label="Zoom out"
+          @click.stop.prevent="zoomOut"
+        >
+          -
+        </button>
       </div>
-      <button
-        type="button"
-        class="map-zoom-slider__label"
-        aria-label="Zoom out"
-        @click.stop.prevent="zoomOut"
-      >
-        -
-      </button>
     </div>
   </div>
 </template>
@@ -51,9 +63,21 @@ const props = defineProps({
     type: Object,
     default: null,
   },
+  sites: {
+    type: Array,
+    default: () => [],
+  },
+  showSites: {
+    type: Boolean,
+    default: false,
+  },
+  selectedSiteId: {
+    type: String,
+    default: null,
+  },
 })
 
-const emit = defineEmits(['map-click'])
+const emit = defineEmits(['map-click', 'site-select', 'site-copy', 'toggle-sites'])
 
 const mapElement = ref(null)
 const zoomTrackWrap = ref(null)
@@ -68,8 +92,26 @@ const thumbSize = 18
 let mapInstance
 let tileLayer
 let pointLayer
+let siteLayer
 let isZoomDragging = false
 let zoomDragOffsetY = 0
+const siteMarkersById = new Map()
+
+const defaultSiteMarkerStyle = {
+  radius: 7,
+  weight: 2,
+  color: '#15334a',
+  fillColor: '#d7a441',
+  fillOpacity: 0.9,
+}
+
+const selectedSiteMarkerStyle = {
+  radius: 9,
+  weight: 3,
+  color: '#15334a',
+  fillColor: '#3f8a83',
+  fillOpacity: 0.95,
+}
 
 function setMapInteractionsEnabled(enabled) {
   if (!mapInstance) {
@@ -152,6 +194,117 @@ function updatePoint(point) {
 
   pointLayer.bindTooltip(point.label, { direction: 'top' })
   mapInstance.panTo(latLng, { animate: true })
+}
+
+function getSiteCoordinateLabel(site) {
+  return `${site.latitude.toFixed(6)}, ${site.longitude.toFixed(6)}`
+}
+
+function getSiteLocationLabel(site) {
+  return [site.parish, site.municipality].filter(Boolean).join(' · ')
+}
+
+function buildSitePopupContent(site) {
+  const container = document.createElement('div')
+  container.className = 'map-site-popup'
+
+  const title = document.createElement('div')
+  title.className = 'map-site-popup__title'
+  title.textContent = site.name
+  container.appendChild(title)
+
+  const location = getSiteLocationLabel(site)
+
+  if (location) {
+    const locationNode = document.createElement('div')
+    locationNode.className = 'map-site-popup__location'
+    locationNode.textContent = location
+    container.appendChild(locationNode)
+  }
+
+  const coordinates = document.createElement('div')
+  coordinates.className = 'map-site-popup__coords'
+  coordinates.textContent = getSiteCoordinateLabel(site)
+  container.appendChild(coordinates)
+
+  const copyButton = document.createElement('button')
+  copyButton.type = 'button'
+  copyButton.className = 'map-site-popup__copy'
+  copyButton.textContent = 'Copy coordinates'
+  copyButton.addEventListener('click', (event) => {
+    stopEventPropagation(event)
+    emit('site-copy', site)
+  })
+  container.appendChild(copyButton)
+
+  return container
+}
+
+function applySelectedSiteMarkerStyle() {
+  siteMarkersById.forEach((marker, markerId) => {
+    marker.setStyle(markerId === props.selectedSiteId ? selectedSiteMarkerStyle : defaultSiteMarkerStyle)
+  })
+}
+
+function focusSelectedSite(openPopup = false) {
+  if (!mapInstance || props.showSites !== true || !props.selectedSiteId) {
+    return
+  }
+
+  const marker = siteMarkersById.get(props.selectedSiteId)
+
+  if (!marker) {
+    return
+  }
+
+  marker.bringToFront()
+  mapInstance.panTo(marker.getLatLng(), { animate: true })
+
+  if (openPopup) {
+    marker.openPopup()
+  }
+}
+
+function updateSites() {
+  if (!mapInstance) {
+    return
+  }
+
+  if (!siteLayer) {
+    siteLayer = L.layerGroup()
+  }
+
+  siteLayer.clearLayers()
+  siteMarkersById.clear()
+
+  if (mapInstance.hasLayer(siteLayer)) {
+    mapInstance.removeLayer(siteLayer)
+  }
+
+  if (props.showSites !== true) {
+    return
+  }
+
+  props.sites.forEach((site) => {
+    const marker = L.circleMarker(
+      [site.latitude, site.longitude],
+      site.id === props.selectedSiteId ? selectedSiteMarkerStyle : defaultSiteMarkerStyle,
+    )
+
+    marker.bindPopup(buildSitePopupContent(site), {
+      autoPan: true,
+      closeButton: true,
+    })
+    marker.on('click', () => {
+      emit('site-select', site)
+    })
+    marker.addTo(siteLayer)
+    siteMarkersById.set(site.id, marker)
+  })
+
+  siteLayer.addTo(mapInstance)
+  applySelectedSiteMarkerStyle()
+  focusSelectedSite(true)
 }
 
 function syncZoomLevel() {
@@ -346,6 +499,7 @@ onMounted(() => {
   window.addEventListener('keydown', handleWindowKeydown)
   mapElement.value.title = 'Click the map to set the current coordinates'
   updatePoint(props.point)
+  updateSites()
   syncZoomLevel()
   zoomReady.value = true
 })
@@ -356,6 +510,25 @@ watch(
     updatePoint(point)
   },
   { deep: true },
+)
+
+watch(
+  () => [props.showSites, props.sites],
+  () => {
+    updateSites()
+  },
+  { deep: true },
+)
+
+watch(
+  () => props.selectedSiteId,
+  (selectedSiteId) => {
+    applySelectedSiteMarkerStyle()
+
+    if (selectedSiteId) {
+      focusSelectedSite(true)
+    }
+  },
 )
 
 onBeforeUnmount(() => {
@@ -375,11 +548,48 @@ onBeforeUnmount(() => {
   position: relative;
 }
 
-.map-zoom-slider {
+.map-control-stack {
   position: absolute;
   top: 12px;
   left: 12px;
   z-index: 500;
+  display: grid;
+  gap: 10px;
+}
+
+.map-site-toggle {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(21, 51, 74, 0.14);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255, 249, 239, 0.97), rgba(243, 235, 221, 0.94));
+  box-shadow: 0 10px 28px rgba(21, 51, 74, 0.2);
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    background-color 120ms ease;
+}
+
+.map-site-toggle:hover,
+.map-site-toggle:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(21, 51, 74, 0.24);
+}
+
+.map-site-toggle[aria-pressed='true'] {
+  background: linear-gradient(180deg, rgba(230, 243, 239, 0.98), rgba(201, 228, 221, 0.95));
+}
+
+.map-site-toggle__icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.map-zoom-slider {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -473,8 +683,41 @@ onBeforeUnmount(() => {
   box-shadow: 0 6px 16px rgba(21, 51, 74, 0.3);
 }
 
+:global(.map-site-popup) {
+  display: grid;
+  gap: 6px;
+  min-width: 220px;
+}
+
+:global(.map-site-popup__title) {
+  font-weight: 700;
+  color: #15334a;
+}
+
+:global(.map-site-popup__location) {
+  color: rgba(21, 51, 74, 0.78);
+  font-size: 0.86rem;
+}
+
+:global(.map-site-popup__coords) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.84rem;
+  color: #15334a;
+}
+
+:global(.map-site-popup__copy) {
+  justify-self: start;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff9f1;
+  font-weight: 700;
+  background: linear-gradient(135deg, #15334a, #29516f 72%);
+  cursor: pointer;
+}
+
 @media (max-width: 640px) {
-  .map-zoom-slider {
+  .map-control-stack {
     top: 10px;
     left: 10px;
   }

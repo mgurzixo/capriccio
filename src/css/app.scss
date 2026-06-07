@@ -211,6 +211,67 @@ body {
   margin-top: 16px;
 }
 
+.sites-card__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sites-card__summary {
+  padding-top: 0;
+}
+
+.site-directory-list {
+  display: grid;
+  gap: 10px;
+  max-height: 460px;
+  overflow: auto;
+}
+
+.site-directory-item {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid rgba(21, 51, 74, 0.12);
+  border-radius: 14px;
+  color: var(--capriccio-ink);
+  text-align: left;
+  background: rgba(255, 255, 255, 0.58);
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.site-directory-item:hover,
+.site-directory-item:focus-visible {
+  border-color: rgba(21, 51, 74, 0.3);
+  box-shadow: 0 8px 20px rgba(21, 51, 74, 0.08);
+  transform: translateY(-1px);
+}
+
+.site-directory-item--active {
+  border-color: rgba(215, 164, 65, 0.55);
+  background: linear-gradient(180deg, rgba(255, 248, 233, 0.96), rgba(248, 239, 220, 0.96));
+}
+
+.site-directory-item__name {
+  font-weight: 700;
+}
+
+.site-directory-item__meta,
+.site-directory-item__coords,
+.site-directory-item__duplicates {
+  font-size: 0.86rem;
+  color: rgba(21, 51, 74, 0.76);
+}
+
+.site-directory-item__coords {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

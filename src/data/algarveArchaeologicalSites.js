@@ -1,0 +1,866 @@
+export const algarveArchaeologicalSites = [
+  {
+    "id": "node/983597858",
+    "name": "Anta da Masmorra",
+    "municipality": "Tavira",
+    "parish": "Montinho do Cravo",
+    "latitude": 37.3772011,
+    "longitude": -7.8635438,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/7047444761",
+    "name": "Anta da Pedra do Alagar",
+    "municipality": "Loulé",
+    "parish": "Corte do Ouro",
+    "latitude": 37.3612924,
+    "longitude": -7.9422526,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4807730867",
+    "name": "Anta do Malhão",
+    "municipality": "Alcoutim e Pereiro",
+    "parish": "Afonso Vicente",
+    "latitude": 37.4850969,
+    "longitude": -7.5427495,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4809515351",
+    "name": "Bairro Almóada do Convento da Graça",
+    "municipality": "Tavira",
+    "parish": "Tavira (Santa Maria e Santiago)",
+    "latitude": 37.1251753,
+    "longitude": -7.6527774,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4804706164",
+    "name": "Barragem Romana de Álamo",
+    "municipality": "Castro Marim",
+    "parish": "Foz de Odeleite",
+    "latitude": 37.3878937,
+    "longitude": -7.4441471,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/39669390",
+    "name": "Cacela Velha",
+    "municipality": "Vila Real de Santo António",
+    "parish": "Cacela Velha",
+    "latitude": 37.1573756,
+    "longitude": -7.5462691,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/397478084",
+    "name": "Calçada e via antiga do Ribeiro do Lagar",
+    "municipality": "Tavira",
+    "parish": "Várzeas",
+    "latitude": 37.1574966,
+    "longitude": -7.7979795,
+    "duplicateCount": 1
+  },
+  {
+    "id": "relation/10984504",
+    "name": "Calçadinha Romana de São Brás de Alportel",
+    "municipality": "São Brás de Alportel",
+    "parish": "São Brás de Alportel",
+    "latitude": 37.143521,
+    "longitude": -7.8906251,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/488644680",
+    "name": "Capela de Nossa Senhora da Conceição",
+    "municipality": "Loulé",
+    "parish": "Loulé (São Clemente)",
+    "latitude": 37.1396114,
+    "longitude": -8.0233233,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/9062902294",
+    "name": "Castelo das Relíquias",
+    "municipality": "Giões",
+    "parish": "",
+    "latitude": 37.49667,
+    "longitude": -7.706086,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/480611725",
+    "name": "Castelo de Alvor",
+    "municipality": "Portimão",
+    "parish": "Praia de Alvor",
+    "latitude": 37.1292544,
+    "longitude": -8.5935437,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/434788663",
+    "name": "Castro de Alferce",
+    "municipality": "Monchique",
+    "parish": "Alto",
+    "latitude": 37.3210762,
+    "longitude": -8.4904603,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/275320922",
+    "name": "Cerro da Vila",
+    "municipality": "Quarteira",
+    "parish": "Vilamoura",
+    "latitude": 37.0806099,
+    "longitude": -8.119689,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4005390718",
+    "name": "Cerro das Pedras Altas",
+    "municipality": "Tavira",
+    "parish": "Mealha",
+    "latitude": 37.3542256,
+    "longitude": -7.8716227,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/6635532479",
+    "name": "Cerro do Castelinho dos Mouros",
+    "municipality": "Alcoutim e Pereiro",
+    "parish": "Corte da Seda",
+    "latitude": 37.4149422,
+    "longitude": -7.4616534,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/5799480270",
+    "name": "Cerro do Castelo de Santa Justa",
+    "municipality": "Martim Longo",
+    "parish": "",
+    "latitude": 37.4210646,
+    "longitude": -7.7028322,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4807730832",
+    "name": "Cista do Cerro do Malhão",
+    "municipality": "Martim Longo",
+    "parish": "",
+    "latitude": 37.4352889,
+    "longitude": -7.7746278,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4999428513",
+    "name": "Concheiro da Praia do Zavial",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.045467,
+    "longitude": -8.866669,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999426618",
+    "name": "Convento de São José",
+    "municipality": "Lagoa",
+    "parish": "",
+    "latitude": 37.1369094,
+    "longitude": -8.4536187,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999426620",
+    "name": "Cromeleque de Amantes I",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0649457,
+    "longitude": -8.9160472,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999426621",
+    "name": "Cromeleque de Amantes II",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0648511,
+    "longitude": -8.9149715,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/12092514245",
+    "name": "Enterreiro",
+    "municipality": "Castro Marim",
+    "parish": "Castro Marim",
+    "latitude": 37.212855,
+    "longitude": -7.4433205,
+    "duplicateCount": 1
+  },
+  {
+    "id": "relation/13273724",
+    "name": "Estação Arqueológica de Monte Molião",
+    "municipality": "Lagos",
+    "parish": "São Gonçalo de Lagos",
+    "latitude": 37.1147046,
+    "longitude": -8.6745925,
+    "duplicateCount": 1
+  },
+  {
+    "id": "relation/8501394",
+    "name": "Estação Arqueológica Romana da Luz de Tavira",
+    "municipality": "Tavira",
+    "parish": "Arroio",
+    "latitude": 37.0841055,
+    "longitude": -7.6933546,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/763183437",
+    "name": "Estação Arqueológica Romana da Praia da Luz",
+    "municipality": "Lagos",
+    "parish": "",
+    "latitude": 37.0860636,
+    "longitude": -8.7288174,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/396618961",
+    "name": "Estação Romana da Quinta da Abicada",
+    "municipality": "Portimão",
+    "parish": "",
+    "latitude": 37.1514441,
+    "longitude": -8.5967769,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/772155653",
+    "name": "Forno de Cal",
+    "municipality": "Portimão",
+    "parish": "Alcalar",
+    "latitude": 37.1995335,
+    "longitude": -8.5871005,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/772700282",
+    "name": "Forno de Cal",
+    "municipality": "Olhão",
+    "parish": "Cabeça",
+    "latitude": 37.1084678,
+    "longitude": -7.7792816,
+    "duplicateCount": 2
+  },
+  {
+    "id": "way/492878625",
+    "name": "Fortaleza da Arrifana",
+    "municipality": "Aljezur",
+    "parish": "Aljezur",
+    "latitude": 37.2963281,
+    "longitude": -8.8741008,
+    "duplicateCount": 1
+  },
+  {
+    "id": "relation/13595046",
+    "name": "Forte de Burgau",
+    "municipality": "Vila do Bispo",
+    "parish": "Burgau",
+    "latitude": 37.0720209,
+    "longitude": -8.7726937,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/11390006940",
+    "name": "Forte de Vera Cruz da Figueira",
+    "municipality": "Vila do Bispo",
+    "parish": "",
+    "latitude": 37.0611239,
+    "longitude": -8.8387223,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/1096370893",
+    "name": "Forte do Zavial",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0446599,
+    "longitude": -8.8758264,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999273882",
+    "name": "Hipogeu",
+    "municipality": "Portimão",
+    "parish": "Alcalar",
+    "latitude": 37.20628,
+    "longitude": -8.59367,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/12522595939",
+    "name": "Menir Cerro do Camacho",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0630599,
+    "longitude": -8.9190087,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/6015590970",
+    "name": "Menir da Cabeça do Rochedo",
+    "municipality": "Lagos",
+    "parish": "São Gonçalo de Lagos",
+    "latitude": 37.1332093,
+    "longitude": -8.701521,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/12522595943",
+    "name": "Menir da Casa do Francês",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0693741,
+    "longitude": -8.9179494,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/12522595941",
+    "name": "Menir da Casa do Francês 1",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0673917,
+    "longitude": -8.9179289,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/12522595942",
+    "name": "Menir da Casa do Francês 2",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0675714,
+    "longitude": -8.9179305,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/1814943664",
+    "name": "Menir da Vilarinha 1",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Figueirinhas",
+    "latitude": 37.2486117,
+    "longitude": -8.3378815,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/1814943657",
+    "name": "Menir da Vilarinha 2",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Vale Fuzeiros",
+    "latitude": 37.2465744,
+    "longitude": -8.341609,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/1814943653",
+    "name": "Menir da Vilarinha 3",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Vale Fuzeiros",
+    "latitude": 37.2453034,
+    "longitude": -8.3442737,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/1814943662",
+    "name": "Menir da Vilarinha 5",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Vale Fuzeiros",
+    "latitude": 37.245918,
+    "longitude": -8.345967,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4947031528",
+    "name": "Menir de Aspradantes",
+    "municipality": "Vila do Bispo",
+    "parish": "",
+    "latitude": 37.0725186,
+    "longitude": -8.8653068,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/5525832054",
+    "name": "Menir de Aspradantes",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0600042,
+    "longitude": -8.8635954,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999426647",
+    "name": "Menir dos Gregórios",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Vale Fuzeiros",
+    "latitude": 37.2406721,
+    "longitude": -8.3509045,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999426655",
+    "name": "Menir Pedra Escorregadia 1",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0709578,
+    "longitude": -8.918092,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999426654",
+    "name": "Menir Pedra Escorregadia 2",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.070408,
+    "longitude": -8.9186873,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999426652",
+    "name": "Menires do Lavajo",
+    "municipality": "Alcoutim e Pereiro",
+    "parish": "São Martinho",
+    "latitude": 37.5014309,
+    "longitude": -7.53505,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3999426653",
+    "name": "Menires do Padrão",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0626692,
+    "longitude": -8.8883512,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/957293274",
+    "name": "Monte de Larache",
+    "municipality": "Tavira",
+    "parish": "Ribeira",
+    "latitude": 37.3083556,
+    "longitude": -7.8019333,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/36970201",
+    "name": "Monumentos Megalíticos de Alcalar",
+    "municipality": "Portimão",
+    "parish": "Alcalar",
+    "latitude": 37.1988153,
+    "longitude": -8.5881007,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/170338517",
+    "name": "Necrópole da Forneca",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Vale Fuzeiros",
+    "latitude": 37.2540694,
+    "longitude": -8.3479074,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/7086010866",
+    "name": "Necrópole da Pedra Escorregadia",
+    "municipality": "Vila do Bispo",
+    "parish": "Vila do Bispo e Raposeira",
+    "latitude": 37.0708888,
+    "longitude": -8.9179965,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/1814943678",
+    "name": "Necrópole da Pedreirinha",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Figueirinhas",
+    "latitude": 37.249367,
+    "longitude": -8.338849,
+    "duplicateCount": 3
+  },
+  {
+    "id": "node/4807730800",
+    "name": "Necrópole das Soalheironas",
+    "municipality": "Alcoutim e Pereiro",
+    "parish": "Vascão",
+    "latitude": 37.5094,
+    "longitude": -7.5000333,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/170338516",
+    "name": "Necrópole de Carrasqueira",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Vale Fuzeiros",
+    "latitude": 37.2481595,
+    "longitude": -8.3558698,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/7213675629",
+    "name": "Necrópole romana de Fonte Velha",
+    "municipality": "Lagos",
+    "parish": "",
+    "latitude": 37.1593111,
+    "longitude": -8.7497639,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/11992300899",
+    "name": "Núcleo Museológico de Arqueologia",
+    "municipality": "Alcoutim e Pereiro",
+    "parish": "",
+    "latitude": 37.4705966,
+    "longitude": -7.4722103,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/303361106",
+    "name": "Núcleo Museológico Fenício",
+    "municipality": "Tavira",
+    "parish": "Tavira (Santa Maria e Santiago)",
+    "latitude": 37.1255585,
+    "longitude": -7.6508961,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3264882331",
+    "name": "Parque Mineiro - Cova dos Mouros",
+    "municipality": "Vaqueiros",
+    "parish": "",
+    "latitude": 37.4033371,
+    "longitude": -7.7179172,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/12507507893",
+    "name": "Pedra do Galo",
+    "municipality": "Lagos",
+    "parish": "",
+    "latitude": 37.149384,
+    "longitude": -8.7916644,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/7123140490",
+    "name": "Pedreirinha 1",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Figueirinhas",
+    "latitude": 37.252918,
+    "longitude": -8.330995,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/7123140489",
+    "name": "Pedreirinha 2",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Figueirinhas",
+    "latitude": 37.250287,
+    "longitude": -8.336613,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4898967292",
+    "name": "Poço-Cisterna Árabe de Silves",
+    "municipality": "Silves",
+    "parish": "",
+    "latitude": 37.1889317,
+    "longitude": -8.4389675,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/963887085",
+    "name": "Ponte de Marim",
+    "municipality": "Olhão",
+    "parish": "Marim",
+    "latitude": 37.0435294,
+    "longitude": -7.8110539,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/963887092",
+    "name": "Ponte Velha de Quelfes",
+    "municipality": "Olhão",
+    "parish": "Ponte Velha",
+    "latitude": 37.0550743,
+    "longitude": -7.8299322,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/62046052",
+    "name": "Povoado Islâmico de Pescadores",
+    "municipality": "Aljezur",
+    "parish": "",
+    "latitude": 37.1731306,
+    "longitude": -8.9079126,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/13342315902",
+    "name": "Presa da Moura",
+    "municipality": "Lagoa e Carvoeiro",
+    "parish": "",
+    "latitude": 37.1017621,
+    "longitude": -8.4938592,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/417707855",
+    "name": "Quinta de Marim 1",
+    "municipality": "Olhão",
+    "parish": "",
+    "latitude": 37.0335114,
+    "longitude": -7.8121961,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/12004775700",
+    "name": "Reguengo",
+    "municipality": "Portimão",
+    "parish": "Portimão",
+    "latitude": 37.2030172,
+    "longitude": -8.5543013,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/480284978",
+    "name": "Ribat da Arrifana",
+    "municipality": "Aljezur",
+    "parish": "Aljezur",
+    "latitude": 37.3203534,
+    "longitude": -8.8764128,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3497106583",
+    "name": "Ribeira de Alcantarilha",
+    "municipality": "Armação de Pêra",
+    "parish": "Urbanização Solário da Praia",
+    "latitude": 37.1064185,
+    "longitude": -8.3488449,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3497117999",
+    "name": "Rocha das Gaivotas",
+    "municipality": "Sagres",
+    "parish": "",
+    "latitude": 37.029863,
+    "longitude": -8.9883786,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/6985236239",
+    "name": "Ruínas Lusitano-Romanas da Boca do Rio",
+    "municipality": "Vila do Bispo",
+    "parish": "",
+    "latitude": 37.0664324,
+    "longitude": -8.8105436,
+    "duplicateCount": 1
+  },
+  {
+    "id": "relation/12948770",
+    "name": "Ruínas romanas da Quinta de Marim",
+    "municipality": "Olhão",
+    "parish": "Marim",
+    "latitude": 37.0384684,
+    "longitude": -7.8124455,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/269062220",
+    "name": "Ruínas Romanas de Milreu",
+    "municipality": "Faro",
+    "parish": "Coiro da Burra",
+    "latitude": 37.0952144,
+    "longitude": -7.9040157,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/7214766990",
+    "name": "Salinas do Coquenão",
+    "municipality": "Olhão",
+    "parish": "",
+    "latitude": 37.0292863,
+    "longitude": -7.8246947,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/12495633711",
+    "name": "São Bartolomeu de Messines",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "",
+    "latitude": 37.260818,
+    "longitude": -8.28403,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4817654738",
+    "name": "São Bartolomeu de Messines 2",
+    "municipality": "São Bartolomeu de Messines",
+    "parish": "Cerro das Vinhas",
+    "latitude": 37.2614932,
+    "longitude": -8.2811487,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/895028245",
+    "name": "Sitio Arqueológico da Praça da Rebública",
+    "municipality": "Albufeira",
+    "parish": "Albufeira e Olhos de Água",
+    "latitude": 37.087223,
+    "longitude": -8.2521836,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/328566042",
+    "name": "Sítio Arqueológico Poço Antigo",
+    "municipality": "Vila Real de Santo António",
+    "parish": "Cacela Velha",
+    "latitude": 37.1574018,
+    "longitude": -7.5449074,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/3994226703",
+    "name": "Tholos da Cumeada",
+    "municipality": "Loulé",
+    "parish": "Corte do Ouro",
+    "latitude": 37.3446536,
+    "longitude": -7.9211511,
+    "duplicateCount": 1
+  },
+  {
+    "id": "relation/10707843",
+    "name": "Tholos de Alcalar 7",
+    "municipality": "Portimão",
+    "parish": "Alcalar",
+    "latitude": 37.1991716,
+    "longitude": -8.5880368,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/606394656",
+    "name": "Tholos de Alcalar 9",
+    "municipality": "Portimão",
+    "parish": "Alcalar",
+    "latitude": 37.1993703,
+    "longitude": -8.5878497,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/4807730781",
+    "name": "Tholos do Cerro do Malhanito",
+    "municipality": "Tavira",
+    "parish": "Montinho do Cravo",
+    "latitude": 37.3883,
+    "longitude": -7.86545,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/6896616665",
+    "name": "Torre da Amoreira",
+    "municipality": "Olhão",
+    "parish": "Bias do Norte",
+    "latitude": 37.0519442,
+    "longitude": -7.7823328,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/1026625146",
+    "name": "Torre da Lapa",
+    "municipality": "Lagoa e Carvoeiro",
+    "parish": "",
+    "latitude": 37.1007877,
+    "longitude": -8.5025033,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/6896640458",
+    "name": "Torre de Alfanxia",
+    "municipality": "Olhão",
+    "parish": "Bias do Norte",
+    "latitude": 37.0631646,
+    "longitude": -7.7712626,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/746620418",
+    "name": "Torre Velha",
+    "municipality": "Albufeira",
+    "parish": "Albufeira e Olhos de Água",
+    "latitude": 37.0771516,
+    "longitude": -8.2976413,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/7047430525",
+    "name": "Túmulo Megalítico Santa Rita 2",
+    "municipality": "Vila Real de Santo António",
+    "parish": "Santa Rita",
+    "latitude": 37.17989,
+    "longitude": -7.56578,
+    "duplicateCount": 1
+  },
+  {
+    "id": "node/10778266674",
+    "name": "Unnamed archaeological site node/10778266674",
+    "municipality": "Albufeira",
+    "parish": "Albufeira e Olhos de Água",
+    "latitude": 37.0877793,
+    "longitude": -8.2157752,
+    "duplicateCount": 1
+  },
+  {
+    "id": "relation/19216681",
+    "name": "Unnamed archaeological site relation/19216681",
+    "municipality": "Loulé",
+    "parish": "Penina",
+    "latitude": 37.2561797,
+    "longitude": -8.1053989,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/656119834",
+    "name": "Unnamed archaeological site way/656119834",
+    "municipality": "Loulé",
+    "parish": "Monte do Poço",
+    "latitude": 37.2427788,
+    "longitude": -8.0464811,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/763183436",
+    "name": "Unnamed archaeological site way/763183436",
+    "municipality": "Lagos",
+    "parish": "",
+    "latitude": 37.0860761,
+    "longitude": -8.7288363,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/515256466",
+    "name": "Villa romana da Quinta de Marim",
+    "municipality": "Olhão",
+    "parish": "Marim",
+    "latitude": 37.0408096,
+    "longitude": -7.8138823,
+    "duplicateCount": 1
+  },
+  {
+    "id": "way/291395791",
+    "name": "Villa Romana do Montinho das Laranjeiras",
+    "municipality": "Alcoutim e Pereiro",
+    "parish": "Montinho das Laranjeiras",
+    "latitude": 37.4045536,
+    "longitude": -7.4604754,
+    "duplicateCount": 1
+  }
+]

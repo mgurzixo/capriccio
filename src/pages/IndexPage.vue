@@ -204,7 +204,16 @@
       </section>
 
       <section class="map-stack">
-        <LeafletMap :point="mapPoint" @map-click="updateFromMapClick" />
+        <LeafletMap
+          :point="mapPoint"
+          :sites="algarveArchaeologicalSites"
+          :show-sites="showArchaeologicalSites"
+          :selected-site-id="selectedArchaeologicalSiteId"
+          @map-click="updateFromMapClick"
+          @site-select="selectArchaeologicalSite"
+          @site-copy="copySiteCoordinates"
+          @toggle-sites="showArchaeologicalSites = !showArchaeologicalSites"
+        />
       </section>
     </div>
 
@@ -232,6 +241,43 @@
         </q-btn>
       </q-card-section>
     </q-card>
+
+    <q-card class="system-card sites-card page-footer-card">
+      <q-card-section class="sites-card__header">
+        <div>
+          <div class="system-title">OSM Archaeological Sites</div>
+          <div class="system-caption">
+            Deduplicated Algarve list with parish or locality and municipality
+          </div>
+        </div>
+      </q-card-section>
+
+      <q-card-section class="sites-card__summary">
+        <div class="system-caption">
+          {{ algarveArchaeologicalSites.length }} deduplicated OSM sites. Use the temple button on the map to show or hide markers, then select one to center the map and update all four coordinate cards.
+        </div>
+      </q-card-section>
+
+      <q-card-section class="site-directory-list">
+        <button
+          v-for="site in algarveArchaeologicalSites"
+          :key="site.id"
+          type="button"
+          :class="[
+            'site-directory-item',
+            { 'site-directory-item--active': site.id === selectedArchaeologicalSiteId },
+          ]"
+          @click="selectArchaeologicalSite(site)"
+        >
+          <span class="site-directory-item__name">{{ site.name }}</span>
+          <span class="site-directory-item__meta">{{ formatSiteLocation(site) }}</span>
+          <span class="site-directory-item__coords">{{ formatSiteCoordinateText(site) }}</span>
+          <span v-if="site.duplicateCount > 1" class="site-directory-item__duplicates">
+            {{ site.duplicateCount }} nearby OSM geometries merged into this marker
+          </span>
+        </button>
+      </q-card-section>
+    </q-card>
   </q-page>
 </template>
 
@@ -239,6 +285,7 @@
 import { reactive, ref } from 'vue'
 import { copyToClipboard, useQuasar } from 'quasar'
 import LeafletMap from 'components/LeafletMap.vue'
+import { algarveArchaeologicalSites } from 'src/data/algarveArchaeologicalSites'
 import { summaryState } from 'src/lib/summaryState'
 import {
   formatGaussText,
@@ -279,6 +326,8 @@ const form = reactive({
 })
 
 const mapPoint = ref(null)
+const showArchaeologicalSites = ref(false)
+const selectedArchaeologicalSiteId = ref(null)
 
 const samplePresets = [
   {
@@ -343,7 +392,7 @@ function notify(type, message) {
   $q.notify({
     type,
     message,
-    position: 'top-right',
+    position: 'bottom',
   })
 }
 
@@ -370,6 +419,7 @@ function applyResult(result) {
 
 function convertFrom(source) {
   try {
+    selectedArchaeologicalSiteId.value = null
     let result
 
     if (source === 'wgs84') {
@@ -391,9 +441,37 @@ function convertFrom(source) {
 
 function updateFromMapClick(point) {
   try {
+    selectedArchaeologicalSiteId.value = null
     applyResult(from4326(point.latitude, point.longitude))
   } catch (error) {
     notify('negative', error.message)
+  }
+}
+
+function formatSiteLocation(site) {
+  return [site.parish, site.municipality].filter(Boolean).join(' · ')
+}
+
+function formatSiteCoordinateText(site) {
+  return `${site.latitude.toFixed(6)}, ${site.longitude.toFixed(6)}`
+}
+
+function selectArchaeologicalSite(site) {
+  try {
+    selectedArchaeologicalSiteId.value = site.id
+    showArchaeologicalSites.value = true
+    applyResult(from4326(site.latitude, site.longitude))
+  } catch (error) {
+    notify('negative', error.message)
+  }
+}
+
+async function copySiteCoordinates(site) {
+  try {
+    await copyToClipboard(formatSiteCoordinateText(site))
+    notify('positive', 'Site coordinates copied to the clipboard.')
+  } catch (error) {
+    notify('negative', error.message || 'Unable to copy site coordinates.')
   }
 }
 
