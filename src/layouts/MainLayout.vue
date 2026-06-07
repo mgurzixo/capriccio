@@ -1,12 +1,10 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header class="app-header">
-      <div
-        :class="[
-          'header-shell q-px-lg q-py-sm',
-          { 'header-shell--android-capacitor': isAndroidCapacitor },
-        ]"
-      >
+      <div :class="[
+        'header-shell q-px-lg q-py-sm',
+        { 'header-shell--android-capacitor': isAndroidCapacitor },
+      ]">
         <q-toolbar class="header-toolbar q-pa-none">
           <q-toolbar-title class="toolbar-brand">
             <img class="toolbar-logo" :src="capriccioLogo" alt="Capriccio logo" />
@@ -18,15 +16,8 @@
 
           <div class="header-actions">
             <div class="toolbar-caption">EPSG:4326 · EPSG:3763 · C.A.P. M/P · Gauss X/Y</div>
-            <q-btn
-              flat
-              no-caps
-              dense
-              class="header-help-btn"
-              icon="help_outline"
-              label="Help"
-              @click="helpOpen = true"
-            />
+            <q-btn flat no-caps dense class="header-help-btn" icon="help_outline" label="Help"
+              @click="helpOpen = true" />
           </div>
         </q-toolbar>
       </div>
@@ -47,7 +38,9 @@
             <strong>Presentation of the app</strong><br />
             Capriccio helps you work with location points used in Portuguese archaeology. It lets
             you read, convert, and compare the same place across four input cards: two modern
-            coordinate reference systems and two legacy archaeological notations.
+            coordinate reference systems and two legacy archaeological notations. It also shows a
+            deduplicated OpenStreetMap overlay of archaeological sites in Algarve so you can browse
+            nearby places directly on the map.
           </p>
 
           <p>
@@ -78,7 +71,21 @@
             You can type coordinates in any of the four sections, paste them from the clipboard,
             convert them to the other formats, copy the result, use sample presets, and click on the
             map to pick a point. When you click the map, the marker moves and all four coordinate
-            sections are updated automatically.
+            sections are updated automatically. The small temple button above the zoom slider shows
+            or hides OpenStreetMap archaeological-site markers. Selecting one of those sites from
+            the map or from the integrated list centers the map on it, updates all four coordinate
+            cards, and opens a popup with the site name, coordinates, and a copy button for pasting
+            the latitude/longitude into map apps.
+          </p>
+
+          <p>
+            <strong>OpenStreetMap archaeological overlay</strong><br />
+            The archaeological overlay uses OpenStreetMap sites tagged as
+            <strong>historic = archaeological_site</strong> inside Algarve. In the app the list is
+            deduplicated so nearby OSM geometries for the same named place are merged into one
+            selectable entry when they clearly describe the same site. The list keeps the site name
+            together with a locality or parish label and municipality when that information is
+            available in OSM.
           </p>
 
           <p>
@@ -148,11 +155,7 @@
 
           <p>
             <strong>Repository:</strong>
-            <a
-              href="https://github.com/mgurzixo/capriccio"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://github.com/mgurzixo/capriccio" target="_blank" rel="noopener noreferrer">
               https://github.com/mgurzixo/capriccio
             </a>
           </p>
@@ -171,13 +174,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useQuasar } from 'quasar'
-import packageInfo from '../../package.json'
-import capriccioLogo from 'src/assets/capriccio-logo.svg'
+import { ref } from 'vue';
+import { useQuasar } from 'quasar';
+import packageInfo from '../../package.json';
+import capriccioLogo from 'src/assets/capriccio-logo.svg';
 
-const $q = useQuasar()
-const helpOpen = ref(false)
-const isAndroidCapacitor = $q.platform.is.capacitor === true && $q.platform.is.android === true
-const appVersion = packageInfo.version
+const $q = useQuasar();
+const helpOpen = ref(false);
+const isAndroidCapacitor = $q.platform.is.capacitor === true && $q.platform.is.android === true;
+const appVersion = packageInfo.version;
 </script>
